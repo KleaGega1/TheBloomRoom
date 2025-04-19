@@ -1,0 +1,23 @@
+<!-- Add to cart increment decrement qty remove -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/front.css">
+    <link rel="stylesheet" href="/assets/fonts/icofont/icofont.min.css">
+    <title>@yield('title')</title>
+</head>
+<body>
+    @include('client.layouts.header')
+
+    @yield('content')
+
+    @include('client.layouts.footer')
+
+    <script defer src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/jquery.js"></script>
+</body>
+</html>

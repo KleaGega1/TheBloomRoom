@@ -1,0 +1,16 @@
+<!-- # Check if mod_rewrite is enabled -->
+<IfModule mod_rewrite.c>
+    <!-- # Turn on the rewrite engine -->
+    RewriteEngine on
+
+    <!-- #If the requested file does not exist -->
+    RewriteCond %{REQUEST_FILENAME} !-f
+
+    # Redirect all requests to index.php
+    RewriteRule . index.php [L]
+</IfModule>
+
+<!-- # Set Cache-Control header for static files (images, fonts, JavaScript, CSS, etc.) -->
+<FilesMatch "\.(ico|webp|ttf|woff|woff2|jpeg|png|gif|js|css|svg)$">
+    Header set Cache-Control "max-age=63072000, public"
+</FilesMatch>
