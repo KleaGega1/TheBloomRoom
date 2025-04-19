@@ -18,3 +18,7 @@ $router->map('POST', '/profile/[i:id]/update', 'User\ProfileController@update');
 $router->map('GET', '/profile/[i:id]/edit/password', 'User\ProfileController@editPassword');
 $router->map('POST', '/profile/[i:id]/update/password', 'User\ProfileController@updatePassword');
 $router->map('GET', '/profile/[i:id]/orders', 'User\ProfileController@orders');
+/**
+ * ========== Admin routes ==========
+ */
+$router->map('GET', '/admin[/]?', 'Admin\DashboardController@index');
