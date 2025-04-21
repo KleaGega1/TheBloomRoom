@@ -7,7 +7,7 @@
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Edit Profile</h5>
-        <a href="/profile/{{ $user->id }}" class="btn btn-outline-primary btn-sm">
+        <a href="/profile" class="btn btn-outline-primary btn-sm">
             <i class="icofont-arrow-left me-1"></i> Back to Dashboard
         </a>
     </div>
