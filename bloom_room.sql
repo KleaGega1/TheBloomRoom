@@ -243,3 +243,17 @@ CREATE TABLE wishlist (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE users ADD profile_image VARCHAR(255) DEFAULT NULL;
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_token VARCHAR(100) NULL;
+-- Reset Password table
+CREATE TABLE password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(100) NOT NULL,
+    expired_time TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    used TINYINT(1) DEFAULT 0,
+    INDEX (user_id),
+    INDEX (token),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

@@ -17,8 +17,15 @@ $router->map('GET', '/profile/[i:id]/edit', 'User\ProfileController@edit');
 $router->map('POST', '/profile/[i:id]/update', 'User\ProfileController@update');
 $router->map('GET', '/profile/[i:id]/edit/password', 'User\ProfileController@editPassword');
 $router->map('POST', '/profile/[i:id]/update/password', 'User\ProfileController@updatePassword');
-$router->map('GET', '/profile/[i:id]/orders', 'User\ProfileController@orders');
 /**
  * ========== Admin routes ==========
  */
 $router->map('GET', '/admin[/]?', 'Admin\DashboardController@index');
+
+/**
+ * ========== Forgot Password routes ==========
+ */
+$router->map('GET','/forgot-password', 'PasswordResetController@showForgotForm');
+$router->map('POST','/forgot-password', 'PasswordResetController@sendResetLink');
+$router->map('GET','/reset-password[/]?', 'PasswordResetController@showResetForm');
+$router->map('POST','/reset-password', 'PasswordResetController@resetPassword');

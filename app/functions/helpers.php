@@ -52,3 +52,12 @@ function redirect(string $page): void
 {
     header("location: $page");
 }
+function url($path = '')
+{
+    $path = ltrim($path, '/');
+    
+    $base = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+    $base .= $_SERVER['HTTP_HOST'];
+    
+    return $base . '/' . $path;
+}
