@@ -10,6 +10,7 @@ class Database
     {
         $db = new DB();
         $db->addConnection($this->connectionParams());
+        // Set the event dispatcher used by Eloquent models... (optional)
         $db->setAsGlobal();
         $db->bootEloquent();
     }
@@ -22,6 +23,7 @@ class Database
             'database' => $_ENV['DB_NAME'],
             'username' => $_ENV['DB_USERNAME'],
             'password' => $_ENV['DB_PASSWORD'],
+            'port' => $_ENV['DB_PORT'],
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
