@@ -1,4 +1,4 @@
-<!-- Edit profile view of user -->
+<!-- Edit profile view of user  -->
 @extends('user.layouts.app')
 
 @section('title', 'Edit Profile')
