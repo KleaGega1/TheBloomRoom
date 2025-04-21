@@ -35,7 +35,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="surname" class="form-label">
-                            <span class="bg-light p-2 rounded-circle me-2">
+                            <span class="bg-light p-2 rounded-circle me-2 ">
                                 <i class="icofont-user-alt-7 text-primary"></i>
                             </span>
                             Surname
