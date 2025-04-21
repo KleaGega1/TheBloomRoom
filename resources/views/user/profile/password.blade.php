@@ -9,7 +9,7 @@
             <h4 class="mb-0 text-danger fw-semibold">
                 <i class="icofont-key me-2 text-danger"></i> Change Password
             </h4>
-            <a href="/profile/{{ $user->id }}" class="btn btn-outline-danger btn-sm">
+            <a href="/profile" class="btn btn-outline-danger btn-sm">
                 <i class="icofont-arrow-left me-1"></i> Back to Dashboard
             </a>
         </div>

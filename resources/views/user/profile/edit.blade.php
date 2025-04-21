@@ -9,7 +9,7 @@
             <h4 class="mb-0 fw-semibold text-danger">
                 <i class="icofont-edit text-danger me-2"></i> Edit Profile
             </h4>
-            <a href="/profile/{{ $user->id }}" class="btn btn-outline-danger btn-sm">
+            <a href="/profile" class="btn btn-outline-danger btn-sm">
                 <i class="icofont-arrow-left me-1"></i> Back to Dashboard
             </a>
         </div>
