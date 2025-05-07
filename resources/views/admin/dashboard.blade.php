@@ -1,4 +1,3 @@
-<!-- Dashboard View -->
 @extends('admin.layouts.app')
 
 @section('title', 'Dashboard')
@@ -18,17 +17,86 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="card-title">Flowers</h6>
+                        <h6 class="card-title">Gifts</h6>
                     </div>
                     <div>
-                        <i class="icofont icofont-food-basket fs-1"></i>
+                        <i class="icofont icofont-flower fs-1"></i>
                     </div>
                 </div>
                 <div class="mt-3">
-                    <a href="/admin/products" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
+                    <a href="/admin/gifts/" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Flowers</h6>
+                    </div>
+                    <div>
+                        <i class="icofont icofont-flower fs-1"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="/admin/products/flowers" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Bouquets</h6>
+                    </div>
+                    <div>
+                        <i class="icofont icofont-heart fs-1"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="/admin/products/bouquets" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Orders</h6>
+                    </div>
+                    <div>
+                        <i class="icofont icofont-cart fs-1"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="/admin/orders" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 mb-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Users</h6>
+                    </div>
+                    <div>
+                        <i class="icofont icofont-users-alt-5 fs-1"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="/admin/users" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @endsection

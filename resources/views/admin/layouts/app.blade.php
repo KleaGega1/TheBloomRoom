@@ -44,6 +44,21 @@
                                     </div>
                                 </li>
                                 <li class="nav-item mb-2">
+                                    <a href="#submenu1Mobile" data-bs-toggle="collapse" class="nav-link text-white">
+                                        <i class="icofont icofont-food-basket fs-5"></i> <span class="ms-2">Gifts</span>
+                                    </a>
+                                    <div class="collapse" id="submenu1Mobile">
+                                        <ul class="nav flex-column ms-3">
+                                            <li class="nav-item">
+                                                <a href="/admin/gifts" class="nav-link text-white py-1">All Gifts</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/admin/gifts/create" class="nav-link text-white py-1">Add Gift</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="nav-item mb-2">
                                     <a href="#submenu2Mobile" data-bs-toggle="collapse" class="nav-link text-white">
                                         <i class="icofont icofont-slack fs-5"></i> <span class="ms-2">Categories</span>
                                     </a>
@@ -112,6 +127,7 @@
                                 </ul>
                             </div>
                         </li>
+                        
                         <li class="nav-item w-100 mb-2">
                             <a href="#submenu2" data-bs-toggle="collapse" class="nav-link text-white">
                                 <i class="icofont icofont-slack fs-5"></i> <span class="ms-2">Categories</span>
@@ -120,6 +136,21 @@
                                 <ul class="nav flex-column ms-3">
                                     <li class="nav-item">
                                         <a href="/admin/categories" class="nav-link text-white py-1">All Categories</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item w-100 mb-2">
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link text-white">
+                                <i class="icofont icofont-food-basket fs-5"></i> <span class="ms-2">Gifts</span>
+                            </a>
+                            <div class="collapse" id="submenu1">
+                                <ul class="nav flex-column ms-3">
+                                    <li class="nav-item">
+                                        <a href="/admin/gifts" class="nav-link text-white py-1">All Gifts</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/gifts/create" class="nav-link text-white py-1">Add Gift</a>
                                     </li>
                                 </ul>
                             </div>
