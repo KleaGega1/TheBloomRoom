@@ -6,6 +6,36 @@ use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use voku\helper\Paginator;
 
+
+function paginate($num_of_records, $total_count, $table): array|null
+{
+    $pages = new Paginator($num_of_records, 'page');
+    $pages->set_total($total_count);
+    $data = DB::select("SELECT * FROM $table WHERE deleted_at is null ORDER BY created_at DESC" . $pages->get_limit());
+
+    return [
+        json_decode(json_encode($data)),
+        $pages->page_links()
+    ];
+}
+//Paginate data
+function paginateData($model, $perPage = 10)
+{
+    $page = isset($_GET['page']) ? max((int)$_GET['page'], 1) : 1;
+    $offset = ($page - 1) * $perPage;
+
+    $query = $model::whereNull('deleted_at')->orderBy('created_at', 'desc');
+
+    $total = $query->count();
+    $items = $query->offset($offset)->limit($perPage)->get();
+
+    $totalPages = ceil($total / $perPage);
+
+    return [
+        'items' => $items,
+        'links' => render_simple_links($page, $totalPages)
+    ];
+}
 function render_simple_links($current, $total)
 {
     $links = '';

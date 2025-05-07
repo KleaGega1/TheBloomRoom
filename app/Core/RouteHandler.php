@@ -38,6 +38,10 @@ class RouteHandler
 
     protected function callTarget(): void
     {
-        call_user_func_array([new $this->controller, $this->method], [$this->match['params']]);
+        if (empty($this->match['params'])) {
+            call_user_func([new $this->controller, $this->method]);
+        } else {
+            call_user_func_array([new $this->controller, $this->method], array_values($this->match['params']));
+        }
     }
 }
