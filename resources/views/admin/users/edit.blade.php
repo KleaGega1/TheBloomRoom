@@ -27,6 +27,7 @@
                             <input type="text" name="surname" class="form-control border-0 bg-light" value="{{ $user->surname }}" required>
                             <div class="form-text">Unique surname for login</div>
                         </div>
+                        
                         <div class="mb-4">
                             <label for="role" class="form-label">Role</label>
                             <select name="role" class="form-select border-0 bg-light" required>

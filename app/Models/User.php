@@ -10,6 +10,6 @@ class User extends Model
 
 	public $timestamps = true;
 	protected $dates = ['deleted_at'];
-	protected $fillable = ['name', 'surname', 'email', 'password','role','telephone','profile_image'];
+	protected $fillable = ['name', 'surname', 'email', 'password','role','telephone','profile_image','address','city','postal_code'];
 
 }

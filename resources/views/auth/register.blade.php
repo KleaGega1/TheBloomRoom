@@ -48,9 +48,45 @@
                                 </div>
                                 <div class="invalid-feedback">Please enter your last name</div>
                             </div>
-                        </div>
+                            <div class="col-12 col-sm-6">
+                                <label for="address" class="form-label fw-bold text-dark">Address:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-dark" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        </svg>
+                                    </span>
+                                    <input type="text" id="address" name="address" class="form-control shadow-sm" placeholder="Enter your last name" required>
+                                </div>
+                                <div class="invalid-feedback">Please enter your address</div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label for="city" class="form-label fw-bold text-dark">City:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-dark" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        </svg>
+                                    </span>
+                                    <input type="text" id="city" name="city" class="form-control shadow-sm" placeholder="Enter your last name" required>
+                                </div>
+                                <div class="invalid-feedback">Please enter your city</div>
+                            </div>
 
-                        <!-- Email Field -->
+                            <div class="col-12 col-sm-6">
+                                <label for="postal_code" class="form-label fw-bold text-dark">Postal Code:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="text-dark" viewBox="0 0 16 16">
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        </svg>
+                                    </span>
+                                    <input type="text" id="postal_code" name="postal_code" class="form-control shadow-sm" placeholder="Enter your last name" required>
+                                </div>
+                                <div class="invalid-feedback">Please enter your postal code</div>
+                            </div>
+
+                        </div>
                         <div class="mb-3">
                             <label for="email" class="form-label fw-bold text-dark">Email:</label>
                             <div class="input-group">
@@ -63,8 +99,6 @@
                                 <div class="invalid-feedback">Please enter a valid email</div>
                             </div>
                         </div>
-
-                        <!-- Password and Confirm Password Fields (Flex Layout) -->
                         <div class="d-flex mb-3">
                             <div class="flex-fill me-2">
                                 <label for="password" class="form-label fw-bold text-dark">Password:</label>
@@ -92,8 +126,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Phone Number Field -->
                         <div class="mb-3">
                             <label for="telephone" class="form-label fw-bold text-dark">Phone Number</label>
                             <div class="input-group">
@@ -106,8 +138,6 @@
                                 <div class="invalid-feedback">Please provide a valid phone number</div>
                             </div>
                         </div>
-
-                        <!-- Profile Image Upload -->
                         <div class="mb-3">
                             <label for="profile_image" class="form-label fw-bold text-dark">Profile Image</label>
                             <input type="file" name="profile_image" accept="image/*" id="profile_image" class="form-control shadow-sm">
@@ -120,9 +150,7 @@
                         <div class="text-center">
                             <p class="small text-muted mb-0">Already have an account? <a href="/login" class="text-danger fw-bold">Login</a></p>
                         </div>
-
                     </form>
-
                 </div>
             </div>
         </div>
@@ -139,8 +167,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     form.addEventListener('submit', function (event) {
         let isValid = true;
-
-        // Required field check
         form.querySelectorAll('input[required]').forEach(function (input) {
             if (!input.value.trim()) {
                 input.classList.add('is-invalid');
@@ -149,40 +175,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 input.classList.remove('is-invalid');
             }
         });
-
-        // Email format check
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (email.value && !emailRegex.test(email.value)) {
             email.classList.add('is-invalid');
             isValid = false;
         }
-
-        // Password length check
         if (password.value.length < 6) {
             password.classList.add('is-invalid');
             isValid = false;
         }
-
-        // Password confirmation check
         if (confirmPassword.value !== password.value) {
             confirmPassword.classList.add('is-invalid');
             isValid = false;
         }
-
-        // Phone number format check
         const phoneRegex = /^[\d\s()+-]{7,}$/;
         if (telephone.value && !phoneRegex.test(telephone.value)) {
             telephone.classList.add('is-invalid');
             isValid = false;
         }
-
-        // Cancel submission if errors found
         if (!isValid) {
             event.preventDefault();
         }
     });
-
-    // Real-time validation feedback
     form.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', function () {
             this.classList.remove('is-invalid');

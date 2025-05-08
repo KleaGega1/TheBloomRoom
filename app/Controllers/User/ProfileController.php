@@ -28,9 +28,6 @@ class ProfileController extends Controller
         return View::render()->view('user.profile.edit', compact('user'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function update($id): void
     {
         $request = Request::get('post');
@@ -42,6 +39,10 @@ class ProfileController extends Controller
             'name' => ['required' => true],
             'surname' => ['required' => true],
             'telephone'=>['required' => true],
+            'address'=>['required' => true],
+            'city'=>['required' => true],
+            'postal_code'=>['required' => true],
+            'profile_image' => ['image' => true, 'maxSize' => 2 * 1024 * 1024] 
         ]);
 
         $user = User::query()->whereId($id)->first();
@@ -51,6 +52,10 @@ class ProfileController extends Controller
             'name' => $request->name,
             'surname' => $request->surname,
             'telephone' => $request->telephone,
+            'address' => $request->address,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+            'profile_image' => $file ? FileUpload::upload($file, 'profile_images') : $user->profile_image
         ]);
 
         Session::add('message', 'profile updated successfully');
@@ -64,9 +69,6 @@ class ProfileController extends Controller
         return View::render()->view('user.profile.password', compact('user'));
     }
 
-    /**
-     * @throws Exception
-     */
     public function updatePassword($id): void
     {
         $request = Request::get('post');
