@@ -1,5 +1,4 @@
 <!-- Edit users view in admin -->
-```blade
 @extends('admin.layouts.app')
 @section('title', 'Edit User')
 @section('content')
@@ -16,9 +15,9 @@
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-body p-4 p-md-5 text-sm">
                     @include('admin.layouts.messages')
-                    <form action="/admin/users/{{ $user->id }}/update/" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="csrf" value="{{ \App\Core\CSRFToken::_token() }}">
-                        <div class="mb-4">
+                    <form action="/admin/users/{{ $user->id }}/update" method="POST" enctype="multipart/form-data">                        
+                    <input type="hidden" name="csrf" value="{{ \App\Core\CSRFToken::_token() }}">
+                    <div class="mb-4">
                             <label for="name" class="form-label">Name</label>
                             <input type="text" name="name" class="form-control form-control-lg border-0 bg-light" value="{{ $user->name }}" required>
                             <div class="form-text">User's complete name</div>

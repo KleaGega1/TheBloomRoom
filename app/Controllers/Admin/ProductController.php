@@ -320,4 +320,5 @@ class ProductController extends Controller
         Session::add('message', 'Bouquet composition updated successfully');
         redirect('/admin/products');
     }
+
 }
