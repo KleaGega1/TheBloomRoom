@@ -41,6 +41,12 @@ class UserController extends Controller
             'name' => ['required' => true],
             'surname' => ['required' => true],
             'role' => ['required' => true],
+            'email' => ['required' => true, 'email' => true],
+            'telephone' => ['required' => true],
+            'address' => ['required' => true],
+            'city' => ['required' => true],
+            'postal_code' => ['required' => true],
+
         ]);
     
         $users = User::query()->where('id', $id)->first();
@@ -48,6 +54,10 @@ class UserController extends Controller
             'name' => $request->name,
             'surname' => $request->surname,
             'role' => $request->role,
+            'email'=> $request->email,
+            'address' =>$request->address,
+            'city' =>$request->city,
+            'postal_code'=>$request->postal_code
         ]);
         Session::add('message', 'User updated successfully');
         redirect('/admin/users');

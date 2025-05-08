@@ -58,6 +58,39 @@
                     <div class="col-md-6 mb-3">
                         <div class="d-flex align-items-center">
                             <span class="bg-light p-2 rounded-circle me-3">
+                                <i class="icofont-location-pin text-black"></i>
+                            </span>
+                            <div>
+                                <small class="text-muted">Address</small>
+                                <p class="mb-0 fw-medium">{{ $user->address }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <span class="bg-light p-2 rounded-circle me-3">
+                                <i class="icofont-building text-black"></i>
+                            </span>
+                            <div>
+                                <small class="text-muted">City</small>
+                                <p class="mb-0 fw-medium">{{ $user->city }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <span class="bg-light p-2 rounded-circle me-3">
+                                <i class="icofont-location-pin text-black"></i>
+                            </span>
+                            <div>
+                                <small class="text-muted">Postal Code</small>
+                                <p class="mb-0 fw-medium">{{ $user->postal_code }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <span class="bg-light p-2 rounded-circle me-3">
                                 <i class="icofont-phone text-black"></i>
                             </span>
                             <div>

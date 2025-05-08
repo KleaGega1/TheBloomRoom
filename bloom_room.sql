@@ -22,7 +22,7 @@ CREATE TABLE `categories` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL UNIQUE,
+  `name` varchar(255) NOT NULL,
   `surname` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL UNIQUE,
   `telephone` varchar(20) DEFAULT NULL,

@@ -59,6 +59,41 @@
                             <input type="email" id="email" name="email" class="form-control" value="{{ $user->email }}" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="address" class="form-label fw-bold small text-muted">
+                            Address
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="icofont-user-alt-7 text-danger"></i>
+                            </span>
+                            <input type="text" id="address" name="address" class="form-control" value="{{ $user->address }}" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="city" class="form-label fw-bold small text-muted">
+                            City
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="icofont-user-alt-7 text-danger"></i>
+                            </span>
+                            <input type="text" id="city" name="city" class="form-control" value="{{ $user->city }}" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="postal_code" class="form-label fw-bold small text-muted">
+                            Postal Code
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="icofont-user-alt-7 text-danger"></i>
+                            </span>
+                            <input type="text" id="postal_code" name="postal_code" class="form-control" value="{{ $user->postal_code }}" required>
+                        </div>
+                    </div>
 
                     <div class="col-md-6">
                         <label for="telephone" class="form-label fw-bold small text-muted">

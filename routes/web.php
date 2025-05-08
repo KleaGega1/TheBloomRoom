@@ -78,3 +78,5 @@ $router->map('GET', '/categories/[*:slug][/]?', 'CategoryController@showByCatego
 $router->map('GET', '/admin/users', 'Admin\UserController@index');
 $router->map('GET', '/admin/users/[i:id]/edit', 'Admin\UserController@edit');
 $router->map('POST', '/admin/users/[i:id]/update', 'Admin\UserController@update');
+$router->map('POST', '/admin/users/[i:id]/delete', 'Admin\UserController@delete');
+

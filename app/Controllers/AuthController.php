@@ -18,9 +18,6 @@ class AuthController extends Controller
         return View::render()->view('auth.register');
     }
 
-    /**
-     * @throws Exception
-     */
     public function registerPost(): void
     {
         $request = Request::get('post');
@@ -35,6 +32,11 @@ class AuthController extends Controller
             'password' => ['required' => true, 'min' => 6],
             'confirm_password' => ['required' => true, 'equals' => 'password'],
             'telephone'=>['required' => true],
+            'address'=>['required' => true],
+            'city'=>['required' => true],
+            'postal_code'=>['required' => true],
+            
+
         ]);
 
         $imagePath = null;
@@ -70,7 +72,12 @@ class AuthController extends Controller
             'password' => sha1($request->password),
             'telephone'=> $request->telephone,
             'role' => 'user',
-            'profile_image' => $imagePath
+            'profile_image' => $imagePath,
+            'address'=> $request->address,
+            'city'=> $request->city,
+            'postal_code'=> $request->postal_code,
+
+
         ]);
          
         $user = User::where('email', $request->email)->first();
@@ -106,9 +113,6 @@ class AuthController extends Controller
         return View::render()->view('auth.login');
     }
 
-    /**
-     * @throws Exception
-     */
     //Handle user login.
     public function loginPost(): void
     {
@@ -117,11 +121,10 @@ class AuthController extends Controller
         CSRFToken::verify($request->csrf, false);
     
         RequestValidation::validate($request, [
-            'email' => ['required' => true],  // Make sure this is the correct input name in your login form
+            'email' => ['required' => true],  
             'password' => ['required' => true, 'min' => 6]
         ]);
     
-        // Query by email (assuming email is unique for each user)
         $userQuery = User::query()->where('email', $request->email);
     
         if (!$userQuery->exists()) {
@@ -145,9 +148,9 @@ class AuthController extends Controller
     
         // Redirect based on the role
         if ($user->role == 'admin') {
-            redirect('/admin');  // Admin panel
+            redirect('/admin');  
         } else {
-            redirect('/');  // Homepage for regular users
+            redirect('/');  
         }
     }
     
