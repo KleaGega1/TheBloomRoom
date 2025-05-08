@@ -73,3 +73,8 @@ $router->map('GET', '/gifts[/]?', 'GiftController@index');
 $router->map('GET', '/gifts/[i:id][/]?', 'GiftController@show');
 $router->map('GET', '/gifts/category/[*:categoryName]', 'GiftController@category');
 $router->map('GET', '/categories/[*:slug][/]?', 'CategoryController@showByCategorySlug');
+
+#users routes
+$router->map('GET', '/admin/users', 'Admin\UserController@index');
+$router->map('GET', '/admin/users/[i:id]/edit', 'Admin\UserController@edit');
+$router->map('POST', '/admin/users/[i:id]/update', 'Admin\UserController@update');

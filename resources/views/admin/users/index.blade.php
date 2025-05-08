@@ -17,6 +17,7 @@
                         <th>Telephone</th>
                         <th>City</th>
                         <th>Address</th>
+                        <th>Role</th>
                         <th>Postal code</th>
                         <th>Info</th>
                     </tr>
@@ -30,11 +31,13 @@
                             <td>{{ $user->telephone }}</td>
                             <td>{{ $user->city }}</td>
                             <td>{{ $user->address }}</td>
+                            <td>{{ $user->role }}</td>
                             <td>{{ $user->postal_code }}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"data-bs-target="#model{{ $user->id }}">
-                                   Details
-                                </button>
+                                <a href="/admin/users/{{ $user->id }}/edit" class="btn btn-primary btn-sm">Edit</a>
+                                <form action="/admin/users/{{ $user->id }}/delete" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
                                 <div class="modal fade" id="model{{ $user->id }}" role="dialog">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
