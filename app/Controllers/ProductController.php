@@ -2,15 +2,8 @@
 
 namespace App\Controllers;
 
-<<<<<<< HEAD
 use App\Core\{Request, View, Session};
-use App\Models\{Product, Wishlist};
-=======
-use App\Core\{Request, View};
-use App\Models\Product;
-use App\Models\Review;
-
->>>>>>> 5b5013822443b5ad2c4f6bca98c3646c1d919816
+use App\Models\{Product, Wishlist, Review};
 
 class ProductController extends Controller
 {
@@ -25,7 +18,6 @@ class ProductController extends Controller
         $q = '';
         $sort = '';
         $category = '';
-<<<<<<< HEAD
 
         $query = Product::query();
 
@@ -60,8 +52,8 @@ class ProductController extends Controller
             foreach ($products as $product) {
                 $product->is_in_wishlist = false;
             }
-=======
-    
+        }
+
         $query = Product::query()->with('reviews');
 
         if (isset($request->key) && !empty($request->key)) {
@@ -75,12 +67,11 @@ class ProductController extends Controller
         }
 
         if (!empty($q) || !empty($sort)) {
-            $products = $query->get(); // ❗ Returns Eloquent models
+            $products = $query->get();
         } else {
             $query = Product::query()->with('reviews');
             $products = $query->get();
             $links = '';
->>>>>>> 5b5013822443b5ad2c4f6bca98c3646c1d919816
         }
 
         return View::render()->view('client.products.index', compact('products', 'q', 'sort'));
@@ -94,7 +85,6 @@ class ProductController extends Controller
             abort(404, 'Product not found');
         }
 
-<<<<<<< HEAD
         // Get current user
         $user = Session::get('user');
         
@@ -106,14 +96,11 @@ class ProductController extends Controller
                 ->exists();
         }
     
-=======
         $reviews = Review::where('product_id', $product->id)->get();
 
         $averageRating = Review::where('product_id', $product->id)->avg('rating') ?? 0;
         $reviewCount = Review::where('product_id', $product->id)->count();
 
-
->>>>>>> 5b5013822443b5ad2c4f6bca98c3646c1d919816
         $similarProducts = Product::query()
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
@@ -121,7 +108,6 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
-<<<<<<< HEAD
         // Add wishlist status to similar products
         if ($user) {
             $wishlistItems = Wishlist::query()
@@ -134,15 +120,11 @@ class ProductController extends Controller
             }
         }
     
-        return View::render()->view('client.products.show', compact('product', 'similarProducts'));
-=======
         return View::render()->view('client.products.show', compact(
             'product',
             'similarProducts',
             'averageRating',
             'reviewCount'
         ));
->>>>>>> 5b5013822443b5ad2c4f6bca98c3646c1d919816
     }
-
 }
