@@ -13,48 +13,16 @@ class ProductController extends Controller
     {
         $this->count = Product::all()->count();
     }
-    public function index(): View
-    {
-        $q = '';
-        $sort = '';
-        $category = '';
+public function index(): View
+{
+    $q = '';
+    $sort = '';
+    $links = '';
 
-        $query = Product::query();
+    $query = Product::query();
 
-        if (Request::has('get')) {
-            $request = Request::get('get');
-
-            if (isset($request->key) && !empty($request->key)) {
-                $query = $query->where('name', 'LIKE', '%' . $request->key . '%');
-                $q = $request->key;
-            }
-
-            if (isset($request->sort) && !empty($request->sort)) {
-                $query = $query->orderBy('price', $request->sort);
-                $sort = $request->sort;
-            }
-        }
-
-        $products = $query->whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
-
-        $user = get_logged_in_user();
-
-        if ($user) {
-            $wishlistItems = Wishlist::query()
-                ->where('user_id', $user->id)
-                ->pluck('product_id')
-                ->toArray();
-
-            foreach ($products as $product) {
-                $product->is_in_wishlist = in_array($product->id, $wishlistItems);
-            }
-        } else {
-            foreach ($products as $product) {
-                $product->is_in_wishlist = false;
-            }
-        }
-
-        $query = Product::query()->with('reviews');
+    if (Request::has('get')) {
+        $request = Request::get('get');
 
         if (isset($request->key) && !empty($request->key)) {
             $query = $query->where('name', 'LIKE', '%' . $request->key . '%');
@@ -65,17 +33,29 @@ class ProductController extends Controller
             $query = $query->orderBy('price', $request->sort);
             $sort = $request->sort;
         }
-
-        if (!empty($q) || !empty($sort)) {
-            $products = $query->get();
-        } else {
-            $query = Product::query()->with('reviews');
-            $products = $query->get();
-            $links = '';
-        }
-
-        return View::render()->view('client.products.index', compact('products', 'q', 'sort'));
     }
+    
+    list($products, $links) = paginate($query, 8, 'products');
+    
+    $user = get_logged_in_user();
+
+    if ($user) {
+        $wishlistItems = Wishlist::query()
+            ->where('user_id', $user->id)
+            ->pluck('product_id')
+            ->toArray();
+
+        foreach ($products as $product) {
+            $product->is_in_wishlist = in_array($product->id, $wishlistItems);
+        }
+    } else {
+        foreach ($products as $product) {
+            $product->is_in_wishlist = false;
+        }
+    }
+
+    return View::render()->view('client.products.index', compact('products', 'q', 'sort', 'links'));
+}
 
     public function show($id): View
     {

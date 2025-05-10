@@ -15,7 +15,7 @@ class GiftController extends Controller
     }
     public function index(): View
     {
-        list($gifts, $links) = paginate(8, $this->count, 'gifts');
+        list($gifts, $links) = paginate($query, 8, 'gifts');
 
         $q = '';
         $sort = '';
@@ -74,12 +74,11 @@ class GiftController extends Controller
             $sort = $request->sort;
         }
     }
-    list($gifts, $links) = paginate(8, $this->count, 'gifts');
+    list($gifts, $links) = paginate($query, 8, 'gifts');
+
 
     $gifts = $query->get();
 
     return View::render()->view('client.gifts.index', compact('gifts', 'q', 'sort', 'categoryName', 'links'));
 }
-
-
 }

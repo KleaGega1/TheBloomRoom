@@ -5,18 +5,75 @@ use App\Core\View;
 use App\Models\User;
 use Illuminate\Database\Capsule\Manager as DB;
 use voku\helper\Paginator;
+use App\Core\Request;
 
 
-function paginate($num_of_records, $total_count, $table): array|null
+function paginate($query, $perPage, $route)
 {
-    $pages = new Paginator($num_of_records, 'page');
-    $pages->set_total($total_count);
-    $data = DB::select("SELECT * FROM $table WHERE deleted_at is null ORDER BY created_at DESC" . $pages->get_limit());
+    $currentPage = isset($_GET['page']) ? max((int)$_GET['page'], 1) : 1;
+    $offset = ($currentPage - 1) * $perPage;
 
-    return [
-        json_decode(json_encode($data)),
-        $pages->page_links()
-    ];
+    $countQuery = clone $query;
+    $total = $countQuery->count();
+    $items = $query->offset($offset)->limit($perPage)->get();
+
+    $links = generatePaginationLinks($currentPage, $perPage, $total, $route);
+
+    return [$items, $links];
+}
+
+function generatePaginationLinks($currentPage, $perPage, $total, $route)
+{
+    $totalPages = ceil($total / $perPage);
+    
+    if ($totalPages <= 1) {
+        return '';
+    }
+    
+    $links = '<nav aria-label="Page navigation"><ul class="pagination">';
+
+    $queryParams = $_GET; 
+    unset($queryParams['page']); 
+    $queryString = !empty($queryParams) ? '&' . http_build_query($queryParams) : ''; 
+    
+    $prevDisabled = $currentPage <= 1 ? 'disabled' : '';
+    $prevPage = $currentPage - 1;
+    $links .= "<li class='page-item $prevDisabled'><a class='page-link' href='/$route?page=$prevPage$queryString' aria-label='Previous'><span aria-hidden='true'>&laquo;</span></a></li>";
+    
+    $pageRange = 5;
+    $startPage = max(1, $currentPage - floor($pageRange / 2));
+    $endPage = min($totalPages, $startPage + $pageRange - 1);
+    
+    if ($endPage - $startPage + 1 < $pageRange && $startPage > 1) {
+        $startPage = max(1, $endPage - $pageRange + 1);
+    }
+    
+    if ($startPage > 1) {
+        $links .= "<li class='page-item'><a class='page-link' href='/$route?page=1$queryString'>1</a></li>";
+        if ($startPage > 2) {
+            $links .= "<li class='page-item disabled'><span class='page-link'>...</span></li>";
+        }
+    }
+    
+    for ($i = $startPage; $i <= $endPage; $i++) {
+        $active = $i == $currentPage ? 'active' : '';
+        $links .= "<li class='page-item $active'><a class='page-link' href='/$route?page=$i$queryString'>$i</a></li>";
+    }
+    
+    if ($endPage < $totalPages) {
+        if ($endPage < $totalPages - 1) {
+            $links .= "<li class='page-item disabled'><span class='page-link'>...</span></li>";
+        }
+        $links .= "<li class='page-item'><a class='page-link' href='/$route?page=$totalPages$queryString'>$totalPages</a></li>";
+    }
+    
+    $nextDisabled = $currentPage >= $totalPages ? 'disabled' : '';
+    $nextPage = $currentPage + 1;
+    $links .= "<li class='page-item $nextDisabled'><a class='page-link' href='/$route?page=$nextPage$queryString' aria-label='Next'><span aria-hidden='true'>&raquo;</span></a></li>";
+    
+    $links .= '</ul></nav>';
+
+    return $links;
 }
 //Paginate data
 function paginateData($model, $perPage = 10)
