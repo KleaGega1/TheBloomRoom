@@ -83,15 +83,16 @@
                 </div>
             </div>
             @if(count($similarGift) > 0)
-            <div class="mt-5">
-                <h3 class="fw-bold mb-4">You May Also Like</h3>
-                    @foreach($similarGift as $similar)
-                        @if($similar->id != $gift->id)
-                            @php $gift = $similar; @endphp
-                                @include('client.gifts.gift-card')
-                        @endif
-                    @endforeach
-            </div>
+                <div class="similar-products mt-5">
+                    <h3 class="fw-bold mb-4">You May Also Like</h3>
+                    <div class="row g-4">
+                        @foreach($similarGift as $similar)
+                            @if($similar->id != $gift->id)
+                                    @include('client.gifts.gift-card', ['gift' => $similar])
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
             @endif
         </div>
     </div>

@@ -253,7 +253,7 @@
 
                             .star-rating i.hover,
                             .star-rating i.selected {
-                                color: #ffc107; /* yellow */
+                                color: #ffc107; 
                             }
                         </style>
 
@@ -318,14 +318,27 @@
                             });
                         </script>
                     </div>
-
-
                     <div class="mt-4 text-center">
                         <small class="text-muted">SKU: {{ $product->sku }}</small>
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
+     @if(count($similarProducts) > 0)
+    <div class="similar-products mt-5">
+        <h3 class="fw-bold mb-4">You May Also Like</h3>
+        <div class="row g-4">
+            @foreach($similarProducts as $similarProduct)
+                @if($similarProduct->id != $product->id)
+                        @include('client.products.product-card', ['product' => $similarProduct])
+                @endif
+            @endforeach
+        </div>
+    </div>
+@endif
+    
 </div>
+
 @endsection

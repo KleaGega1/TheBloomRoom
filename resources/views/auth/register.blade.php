@@ -56,7 +56,7 @@
                                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                                         </svg>
                                     </span>
-                                    <input type="text" id="address" name="address" class="form-control shadow-sm" placeholder="Enter your last name" required>
+                                    <input type="text" id="address" name="address" class="form-control shadow-sm" placeholder="Enter your address" required>
                                 </div>
                                 <div class="invalid-feedback">Please enter your address</div>
                             </div>
@@ -68,7 +68,7 @@
                                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                                         </svg>
                                     </span>
-                                    <input type="text" id="city" name="city" class="form-control shadow-sm" placeholder="Enter your last name" required>
+                                    <input type="text" id="city" name="city" class="form-control shadow-sm" placeholder="Enter your city" required>
                                 </div>
                                 <div class="invalid-feedback">Please enter your city</div>
                             </div>
@@ -81,7 +81,7 @@
                                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                                         </svg>
                                     </span>
-                                    <input type="text" id="postal_code" name="postal_code" class="form-control shadow-sm" placeholder="Enter your last name" required>
+                                    <input type="text" id="postal_code" name="postal_code" class="form-control shadow-sm" placeholder="Enter your postal code" required>
                                 </div>
                                 <div class="invalid-feedback">Please enter your postal code</div>
                             </div>

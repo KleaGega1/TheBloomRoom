@@ -41,7 +41,7 @@
             </div>
         @endforelse
     </div>
-<div class="mt-4">
+<div class="pagination">
     {!! $links !!}
 </div>
 </div>
