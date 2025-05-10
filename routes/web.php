@@ -80,3 +80,7 @@ $router->map('GET', '/admin/users/[i:id]/edit', 'Admin\UserController@edit');
 $router->map('POST', '/admin/users/[i:id]/update', 'Admin\UserController@update');
 $router->map('POST', '/admin/users/[i:id]/delete', 'Admin\UserController@delete');
 
+# Wishlist routes
+$router->map('GET', '/profile/wishlist', 'WishlistController@index', 'wishlist.index');
+$router->map('POST', '/wishlist/toggle', 'WishlistController@toggle', 'wishlist.toggle');
+

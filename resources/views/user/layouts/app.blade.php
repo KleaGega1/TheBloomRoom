@@ -31,6 +31,9 @@
                         <a href="/profile" class="list-group-item list-group-item-action">
                             <i class="icofont-dashboard me-2"></i> Dashboard
                         </a>
+                        <a href="/profile/wishlist" class="list-group-item list-group-item-action">
+                            <i class="icofont-heart me-2 text-danger"></i> My Wishlist
+                        </a>
                         <a href="/profile/{{ $user->id }}/edit" class="list-group-item list-group-item-action">
                             <i class="icofont-user me-2"></i> Edit Profile
                         </a>
@@ -86,6 +89,34 @@
             </div>
         </div>
     </div>
+    <div id="custom-alert" style="display:none; position:fixed; top:30px; right:30px; z-index:9999; min-width:220px;"></div>
+    <style>
+    #custom-alert {
+        background: #fff;
+        color: #222;
+        border-radius: 8px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+        padding: 16px 32px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-left: 6px solid #dc3545;
+        transition: opacity 0.3s;
+        opacity: 0.95;
+    }
+    #custom-alert.success { border-left-color: #28a745; }
+    #custom-alert.danger { border-left-color: #dc3545; }
+    </style>
+    <script>
+    function showCustomAlert(message, type = 'success') {
+        const alertBox = document.getElementById('custom-alert');
+        alertBox.textContent = message;
+        alertBox.className = type;
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 1800);
+    }
+    </script>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
