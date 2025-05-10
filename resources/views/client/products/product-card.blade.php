@@ -22,13 +22,23 @@
             <div class="d-flex align-items-center mb-2">
                 <span class="fw-bold text-dark">{{ number_format($product->price, 0) }} $</span>
             </div>
+            @php
+                $reviews = $product->reviews ?? collect();
+                $averageRating = $reviews->avg('rating') ?? 0;
+                $reviewCount = $reviews->count();
+            @endphp
+
+
+
             <div class="d-flex align-items-center mb-2">
-                <span class="fw-semibold me-1">{{ number_format($product->rating ?? 4.8, 1) }}</span>
+                <span class="fw-semibold me-1">{{ number_format($averageRating, 1) }}</span>
                 <div class="text-warning me-2">
                     <i class="fas fa-star"></i>
                 </div>
-                <span class="text-muted small">({{ $product->reviews_count ?? '163' }})</span>
+                <span class="text-muted small">({{ $reviewCount }})</span>
             </div>
+
+
             @if($product->occasion)
                 <div class="d-flex align-items-center mb-2">
                     <span class="text-muted">Occasion: </span>
