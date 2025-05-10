@@ -2,9 +2,18 @@
 @section('title', $product->name)
 @section('content')
 @include('admin.layouts.messages')
+@php use Illuminate\Support\Str; @endphp
 
 <div class="container py-5">
 
+    <!-- Success message display -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success">
+            <?= $_SESSION['success'] ?>
+            <?php unset($_SESSION['success']); ?> <!-- Clear the success message after displaying it -->
+        </div>
+    <?php endif; ?>
+    <!-- Product Details -->
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
         <div class="row g-0">
             <div class="col-md-6">
@@ -22,7 +31,7 @@
             <div class="col-md-6">
                 <div class="card-body p-4 p-lg-5">
                     <h1 class="fw-bold mb-3">{{ $product->name }}</h1>
-                    
+
                     <div class="mb-4">
                         @if($product->quantity <= 0)
                             <span class="badge bg-danger rounded-pill px-3 py-2 fs-6">Out of Stock</span>
@@ -52,7 +61,7 @@
                                 </div>
                             </div>
                             @endif
-                            
+
                             @if($product->length)
                             <div class="col-md-6 mb-2">
                                 <div class="d-flex align-items-center">
@@ -66,7 +75,7 @@
                                 </div>
                             </div>
                             @endif
-                            
+
                             @if($product->occasion)
                             <div class="col-md-6 mb-2">
                                 <div class="d-flex align-items-center">
@@ -93,12 +102,14 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="product-description mb-4">
                         <h4 class="fw-semibold mb-3">Description</h4>
                         <div class="description-content lh-lg">
                             {!! $product->description !!}
                         </div>
                     </div>
+
                     @if($product->is_bouquet)
                     <div class="bouquet-composition mb-4">
                         <h4 class="fw-semibold mb-3">Bouquet Composition</h4>
@@ -128,6 +139,7 @@
                         </div>
                     </div>
                     @endif
+
                     <div class="mt-4">
                         @if($product->quantity > 0)
                         <form action="/cart/add" method="POST">
@@ -161,6 +173,153 @@
                         </p>
                         @endif
                     </div>
+
+                    <!-- Display Product Reviews -->
+                    <div class="product-reviews mt-5">
+                        <h4 class="fw-semibold mb-3">Reviews</h4>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="fw-bold me-2 fs-5">{{ number_format($averageRating, 1) }}</span>
+
+                            <div class="text-warning me-2">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= floor($averageRating))
+                                        <i class="fas fa-star"></i>
+                                    @elseif ($i - $averageRating < 1)
+                                        <i class="fas fa-star-half-alt"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
+                            </div>
+
+                            <span class="text-muted" style="font-size: 13px;">{{ $reviewCount }} {{ Str::plural('rating', $reviewCount) }}</span>
+                        </div>
+
+                        @if ($product->reviews->count() > 0)
+                            <div id="review-container">
+                                @foreach ($product->reviews as $index => $review)
+                                    <div class="review mb-4 {{ $index >= 3 ? 'd-none extra-review' : '' }}">
+                                        <div class="rating text-warning">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= floor($review->rating))
+                                                    <i class="fas fa-star"></i>
+                                                @elseif ($i - $review->rating < 1)
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                @else
+                                                    <i class="far fa-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                        <p class="mb-0">{{ $review->comment }}</p>
+                                        <small class="text-muted d-block" style="font-size: 13px;">
+                                            {{ $review->user->name }} {{ $review->user->surname }}, {{ $review->created_at->format('j F Y') }}
+                                        </small>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @if ($product->reviews->count() > 3)
+                                <button id="read-more-btn" class="btn btn-link p-0 mt-0">Read all reviews</button>
+                            @endif
+                        @else
+                            <p>No reviews yet for this product.</p>
+                        @endif
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const button = document.getElementById('read-more-btn');
+                            if (button) {
+                                button.addEventListener('click', function () {
+                                    document.querySelectorAll('.extra-review').forEach(el => el.classList.remove('d-none'));
+                                    button.style.display = 'none';
+                                });
+                            }
+                        });
+                    </script>
+
+
+                    <div class="leave-review mt-5">
+                        <h4 class="fw-semibold mb-3">Leave a Review</h4>
+
+                        <style>
+                            .star-rating i {
+                                font-size: 24px;
+                                color: #ccc;
+                                cursor: pointer;
+                                transition: color 0.2s;
+                            }
+
+                            .star-rating i.hover,
+                            .star-rating i.selected {
+                                color: #ffc107; /* yellow */
+                            }
+                        </style>
+
+                        <form action="/review/submit" method="POST" class="border rounded-3 p-4 shadow-sm">
+                            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?? ''; ?>">
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+                            <input type="hidden" name="rating" id="rating-value" required>
+
+                            <div class="mb-3">
+                                <label class="form-label">Rating:</label>
+                                <div class="star-rating">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i class="fas fa-star" data-value="{{ $i }}"></i>
+                                    @endfor
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Add a comment:</label>
+                                <textarea name="comment" id="comment" rows="4" class="form-control" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary px-4">Submit Review</button>
+                        </form>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const stars = document.querySelectorAll('.star-rating i');
+                                const ratingInput = document.getElementById('rating-value');
+
+                                let selectedRating = 0;
+
+                                stars.forEach((star, index) => {
+                                    // Hover effect
+                                    star.addEventListener('mouseover', () => {
+                                        stars.forEach((s, i) => {
+                                            s.classList.toggle('hover', i <= index);
+                                        });
+                                    });
+
+                                    star.addEventListener('mouseout', () => {
+                                        stars.forEach((s, i) => {
+                                            s.classList.remove('hover');
+                                            s.classList.toggle('selected', i < selectedRating);
+                                        });
+                                    });
+
+                                    // Click event to set rating
+                                    star.addEventListener('click', () => {
+                                        selectedRating = parseInt(star.getAttribute('data-value'));
+                                        ratingInput.value = selectedRating;
+
+                                        stars.forEach((s, i) => {
+                                            s.classList.remove('selected');
+                                            if (i < selectedRating) {
+                                                s.classList.add('selected');
+                                            }
+                                        });
+                                    });
+                                });
+                            });
+                        </script>
+                    </div>
+
+
                     <div class="mt-4 text-center">
                         <small class="text-muted">SKU: {{ $product->sku }}</small>
                     </div>
@@ -168,93 +327,5 @@
             </div>
         </div>
     </div>
-    @if(count($similarProducts) > 0)
-    <div class="similar-products mt-5">
-        <h3 class="fw-bold mb-4">You May Also Like</h3>
-        <div class="row g-4">
-            @foreach($similarProducts as $similarProduct)
-                @if($similarProduct->id != $product->id)
-                        @include('client.products.product-card', ['product' => $similarProduct])
-                @endif
-            @endforeach
-        </div>
-    </div>
-@endif
-    
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const decreaseBtn = document.querySelector('.decrease-quantity');
-        const increaseBtn = document.querySelector('.increase-quantity');
-        const quantityInput = document.querySelector('.quantity-input');
-        
-        if (decreaseBtn && increaseBtn && quantityInput) {
-            decreaseBtn.addEventListener('click', function() {
-                const value = parseInt(quantityInput.value);
-                if (value > 1) {
-                    quantityInput.value = value - 1;
-                }
-            });
-            
-            increaseBtn.addEventListener('click', function() {
-                const value = parseInt(quantityInput.value);
-                const max = parseInt(quantityInput.getAttribute('max'));
-                if (value < max) {
-                    quantityInput.value = value + 1;
-                }
-            });
-        }
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.classList.remove('shadow-sm');
-                this.classList.add('shadow-lg');
-                this.style.transform = 'translateY(-8px)';
-                
-                const image = this.querySelector('.image-wrapper img');
-                if (image) {
-                    image.style.transform = 'scale(1.07)';
-                }
-                
-                const overlay = this.querySelector('.hover-overlay');
-                if (overlay) {
-                    overlay.style.opacity = '0.1';
-                }
-                
-                const button = this.querySelector('.btn-primary');
-                if (button) {
-                    button.style.backgroundColor = '#0056b3'; 
-                    button.style.paddingLeft = '2rem';
-                    button.style.paddingRight = '2rem';
-                }
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.classList.remove('shadow-lg');
-                this.classList.add('shadow-sm');
-                this.style.transform = 'translateY(0)';
-                
-                const image = this.querySelector('.image-wrapper img');
-                if (image) {
-                    image.style.transform = 'scale(1)';
-                }
-                
-                const overlay = this.querySelector('.hover-overlay');
-                if (overlay) {
-                    overlay.style.opacity = '0';
-                }
-                
-                const button = this.querySelector('.btn-primary');
-                if (button) {
-                    button.style.backgroundColor = '';
-                    button.style.paddingLeft = '1.75rem';
-                    button.style.paddingRight = '1.75rem';
-                }
-            });
-        });
-    });
-</script>
 @endsection
