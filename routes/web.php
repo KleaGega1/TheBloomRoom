@@ -80,3 +80,11 @@ $router->map('GET', '/admin/users/[i:id]/edit', 'Admin\UserController@edit');
 $router->map('POST', '/admin/users/[i:id]/update', 'Admin\UserController@update');
 $router->map('POST', '/admin/users/[i:id]/delete', 'Admin\UserController@delete');
 
+$router->map('POST', '/review/submit', 'ReviewController@submitReview');
+$router->map('GET', '/product/[i:id]', 'ReviewController@show');
+
+
+
+
+
+
