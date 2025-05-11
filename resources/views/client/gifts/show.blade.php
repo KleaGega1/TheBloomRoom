@@ -2,8 +2,18 @@
 @section('title', $gift->name)
 @section('content')
 @include('admin.layouts.messages')
+@php use Illuminate\Support\Str; @endphp
+
 
 <div class="container py-5">
+    <!-- Success message display -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success">
+            <?= $_SESSION['success'] ?>
+            <?php unset($_SESSION['success']); ?> <!-- Clear the success message after displaying it -->
+        </div>
+    <?php endif; ?>
+
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card border-0 shadow-sm overflow-hidden mb-5">
@@ -82,18 +92,166 @@
                     </div>
                 </div>
             </div>
-            @if(count($similarGift) > 0)
-                <div class="similar-products mt-5">
-                    <h3 class="fw-bold mb-4">You May Also Like</h3>
-                    <div class="row g-4">
-                        @foreach($similarGift as $similar)
-                            @if($similar->id != $gift->id)
-                                    @include('client.gifts.gift-card', ['gift' => $similar])
+
+            <!-- Display Product Reviews -->
+            <div class="product-reviews mt-5">
+                        <h4 class="fw-semibold mb-3">Reviews</h4>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="fw-bold me-2 fs-5">{{ number_format($averageRating, 1) }}</span>
+
+                            <div class="text-warning me-2">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= floor($averageRating))
+                                        <i class="fas fa-star"></i>
+                                    @elseif ($i - $averageRating < 1)
+                                        <i class="fas fa-star-half-alt"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
+                            </div>
+
+                            <span class="text-muted" style="font-size: 13px;">{{ $reviewCount }} {{ Str::plural('rating', $reviewCount) }}</span>
+                        </div>
+
+                        @if ($gift->reviews->count() > 0)
+                            <div id="review-container">
+                                @foreach ($gift->reviews as $index => $review)
+                                    <div class="review mb-4 {{ $index >= 3 ? 'd-none extra-review' : '' }}">
+                                        <div class="rating text-warning">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= floor($review->rating))
+                                                    <i class="fas fa-star"></i>
+                                                @elseif ($i - $review->rating < 1)
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                @else
+                                                    <i class="far fa-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                        <p class="mb-0">{{ $review->comment }}</p>
+                                        <small class="text-muted d-block" style="font-size: 13px;">
+                                            {{ $review->user->name }} {{ $review->user->surname }}, {{ $review->created_at->format('j F Y') }}
+                                        </small>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @if ($gift->reviews->count() > 3)
+                                <button id="read-more-btn" class="btn btn-link p-0 mt-0">Read all reviews</button>
                             @endif
-                        @endforeach
+                        @else
+                            <p>No reviews yet for this product.</p>
+                        @endif
                     </div>
-                </div>
-            @endif
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const button = document.getElementById('read-more-btn');
+                            if (button) {
+                                button.addEventListener('click', function () {
+                                    document.querySelectorAll('.extra-review').forEach(el => el.classList.remove('d-none'));
+                                    button.style.display = 'none';
+                                });
+                            }
+                        });
+                    </script>
+
+
+                    <div class="leave-review mt-5">
+                        <h4 class="fw-semibold mb-3">Leave a Review</h4>
+
+                        <style>
+                            .star-rating i {
+                                font-size: 24px;
+                                color: #ccc;
+                                cursor: pointer;
+                                transition: color 0.2s;
+                            }
+
+                            .star-rating i.hover,
+                            .star-rating i.selected {
+                                color: #ffc107; 
+                            }
+                        </style>
+
+                        <form action="/review/submit" method="POST" class="border rounded-3 p-4 shadow-sm">
+                            <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?? ''; ?>">
+                            <input type="hidden" name="gift_id" value="{{ $gift->id }}">
+                            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+                            <input type="hidden" name="rating" id="rating-value" required>
+                            <input type="hidden" name="type" value="gift">
+
+                            <div class="mb-3">
+                                <label class="form-label">Rating:</label>
+                                <div class="star-rating">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i class="fas fa-star" data-value="{{ $i }}"></i>
+                                    @endfor
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Add a comment:</label>
+                                <textarea name="comment" id="comment" rows="4" class="form-control" required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary px-4">Submit Review</button>
+                        </form>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const stars = document.querySelectorAll('.star-rating i');
+                                const ratingInput = document.getElementById('rating-value');
+
+                                let selectedRating = 0;
+
+                                stars.forEach((star, index) => {
+                                    // Hover effect
+                                    star.addEventListener('mouseover', () => {
+                                        stars.forEach((s, i) => {
+                                            s.classList.toggle('hover', i <= index);
+                                        });
+                                    });
+
+                                    star.addEventListener('mouseout', () => {
+                                        stars.forEach((s, i) => {
+                                            s.classList.remove('hover');
+                                            s.classList.toggle('selected', i < selectedRating);
+                                        });
+                                    });
+
+                                    // Click event to set rating
+                                    star.addEventListener('click', () => {
+                                        selectedRating = parseInt(star.getAttribute('data-value'));
+                                        ratingInput.value = selectedRating;
+
+                                        stars.forEach((s, i) => {
+                                            s.classList.remove('selected');
+                                            if (i < selectedRating) {
+                                                s.classList.add('selected');
+                                            }
+                                        });
+                                    });
+                                });
+                            });
+                        </script>
+                    </div>
+
+
+                @if(count($similarGift) > 0)
+                    <div class="similar-products mt-5">
+                        <h3 class="fw-bold mb-4">You May Also Like</h3>
+                        <div class="row g-4">
+                            @foreach($similarGift as $similar)
+                                @if($similar->id != $gift->id)
+                                        @include('client.gifts.gift-card', ['gift' => $similar])
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
         </div>
     </div>
 </div>
