@@ -270,7 +270,13 @@
             <form action="/review/submit" method="POST" class="border rounded-3 p-4 shadow-sm">
                 <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?? ''; ?>">
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+                @if (isset($_SESSION['user_id']))
+                    <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+                @else
+                    <div class="alert alert-warning">
+                        You must be logged in to leave a review. <a href="/login" class="alert-link">Login here</a>.
+                    </div>
+                @endif
                 <input type="hidden" name="rating" id="rating-value" required>
                 <input type="hidden" name="type" value="product">
 
@@ -282,13 +288,15 @@
                         @endfor
                     </div>
                 </div>
-
                 <div class="mb-3">
                     <label for="comment" class="form-label">Add a comment:</label>
                     <textarea name="comment" id="comment" rows="4" class="form-control" required></textarea>
                 </div>
-
-                <button type="submit" class="btn btn-primary px-4">Submit Review</button>
+                @if (isset($_SESSION['user_id']))
+                        <button type="submit" class="btn btn-primary px-4">Submit Review</button>
+                    @else
+                        <button type="button" class="btn btn-secondary px-4" disabled>Login to Submit Review</button>
+                @endif            
             </form>
 
             <script>
