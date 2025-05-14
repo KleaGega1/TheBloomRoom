@@ -16,13 +16,11 @@ class CSRFToken
         return Session::get('token');
     }
 
-    public static function verify($request_token, $regenerate = true): bool
+    public static function verify($request_token, $regenerate = false): bool
     {
-        if (!Session::has('token') or Session::get('token') !== $request_token)
-            return throw new Exception("CSRF token is not valid");
-
-        if ($regenerate)
-            Session::remove('token');
+        if (!Session::has('token') || Session::get('token') !== $request_token) {
+            return false;
+        }
 
         return true;
     }
