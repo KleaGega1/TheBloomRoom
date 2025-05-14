@@ -1,7 +1,10 @@
 <div class="col-12 col-md-4 mb-4 gift-card ">
     <div class="card border-0 h-100 rounded-4 shadow-sm product-card position-relative overflow-hidden">
-        <button class="btn position-absolute end-0 top-0 m-2 z-index-5 bg-white bg-opacity-75 rounded-circle p-2 border-0 wishlist-btn">
-            <i class="far fa-heart fs-5"></i>
+        <button class="btn position-absolute end-0 top-0 m-2 z-index-5 bg-white bg-opacity-75 rounded-circle p-2 border-0 wishlist-btn"
+                data-item-id="{{ $gift->id }}"
+                data-item-type="gift"
+                title="{{ $gift->is_in_wishlist ? 'Remove from Wishlist' : 'Add to Wishlist' }}">
+            <i class="{{ $gift->is_in_wishlist ? 'fas fa-heart text-danger' : 'far fa-heart' }} fs-5"></i>
         </button>
         <div class="bg-white p-3 rounded-top-4 d-flex justify-content-center align-items-center image-container" style="height: 200px;">
             <img src="/{{ $gift->image_path }}" 
@@ -38,6 +41,11 @@
                 <span class="text-muted small me-2">Earliest Delivery</span>
             </div>
             <a href="/gifts/{{ $gift->id }}" class="see-details-btn">See Details</a>
+            @if (strpos($_SERVER['REQUEST_URI'], '/profile/wishlist') !== false)
+                <button class="btn btn-outline-danger btn-sm mt-2 wishlist-btn w-100" data-item-id="{{ $gift->id }}" data-item-type="gift">
+                    <i class="fas fa-heart me-1"></i> Remove from Wishlist
+                </button>
+            @endif
         </div>
     </div>
 </div>
@@ -72,22 +80,83 @@
 }
 </style>
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        const wishlistButtons = document.querySelectorAll('.product-card .btn');
-     wishlistButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const heartIcon = this.querySelector('i');
-                if (heartIcon.classList.contains('far')) {
-                    heartIcon.classList.remove('far');
-                    heartIcon.classList.add('fas', 'text-danger');
-                } else {
-                    heartIcon.classList.remove('fas', 'text-danger');
-                    heartIcon.classList.add('far');
-                }
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', async function(e) {
+        const button = e.target.closest('.wishlist-btn');
+        if (!button) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (button.disabled) return;
+        button.disabled = true;
+
+        const itemId = button.dataset.itemId;
+        const itemType = button.dataset.itemType;
+        const heartIcon = button.querySelector('i');
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            const response = await fetch('/wishlist/toggle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    item_id: itemId,
+                    item_type: itemType
+                })
             });
-        });
+            const data = await response.json();
+            if (data.success) {
+                if (heartIcon) {
+                    heartIcon.className = data.in_wishlist 
+                        ? 'fas fa-heart text-danger fs-5'
+                        : 'far fa-heart fs-5';
+                }
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${data.in_wishlist ? 'success' : 'danger'} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+                alertDiv.style.zIndex = '9999';
+                alertDiv.innerHTML = `
+                    ${data.message}
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                `;
+                document.body.appendChild(alertDiv);
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+                if (!data.in_wishlist && window.location.pathname === '/profile/wishlist') {
+                    button.closest('.col-md-4, .gift-card, .product-card-container').remove();
+                }
+            } else {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3';
+                alertDiv.style.zIndex = '9999';
+                alertDiv.innerHTML = `
+                    ${data.message || 'Failed to update wishlist'}
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                `;
+                document.body.appendChild(alertDiv);
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = `
+                An error occurred while updating wishlist
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+            `;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        } finally {
+            button.disabled = false;
+        }
     });
+});
 </script>

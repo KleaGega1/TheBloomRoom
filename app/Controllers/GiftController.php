@@ -68,13 +68,15 @@ class GiftController extends Controller
             abort(404, 'Gift not found');
         }
 
-        $user = Session::get('user');
+        $user = get_logged_in_user();
 
         if ($user) {
             $gift->is_in_wishlist = Wishlist::query()
-                ->where('user_id', $user['id'])
+                ->where('user_id', $user->id)
                 ->where('gift_id', $gift->id)
                 ->exists();
+        } else {
+            $gift->is_in_wishlist = false;
         }
 
         // Load reviews

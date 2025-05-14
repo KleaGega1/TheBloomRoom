@@ -13,7 +13,11 @@
         @else
             <div class="row g-3">
                 @foreach ($wishlistItems as $item)
-                    @include('client.products.product-card', ['product' => $item->product])
+                    @if ($item->product)
+                        @include('client.products.product-card', ['product' => $item->product])
+                    @elseif ($item->gift)
+                        @include('client.gifts.gift-card', ['gift' => $item->gift])
+                    @endif
                 @endforeach
             </div>
         @endif
@@ -26,41 +30,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const wishlistButtons = document.querySelectorAll('.wishlist-btn');
     
     wishlistButtons.forEach(button => {
-        button.addEventListener('click', async function() {
-            const productId = this.dataset.productId;
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const itemId = this.dataset.itemId;
+            const itemType = this.dataset.itemType;
             
             try {
                 const response = await fetch('/wishlist/toggle', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ product_id: productId })
+                    body: JSON.stringify({ 
+                        item_id: itemId,
+                        item_type: itemType
+                    })
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Update heart icon
-                    const heartIcon = this.querySelector('i');
-                    heartIcon.className = data.in_wishlist 
-                        ? 'fas fa-heart text-danger'
-                        : 'far fa-heart';
-                    
-                    // Show message
-                    alert(data.message);
-                    
-                    // If removed from wishlist, remove the card
                     if (!data.in_wishlist) {
                         this.closest('.col-md-4').remove();
                     }
+                    showCustomAlert(data.message, data.in_wishlist ? 'success' : 'danger');
                 } else {
-                    alert(data.message || 'Failed to update wishlist');
+                    showCustomAlert(data.message || 'Failed to update wishlist', 'danger');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred while updating wishlist');
+                showCustomAlert('An error occurred while updating wishlist', 'danger');
             }
         });
     });

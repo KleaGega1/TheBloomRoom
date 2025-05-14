@@ -1,7 +1,8 @@
 <div class="col-12 col-md-4 mb-4 product-card-container">
     <div class="card border-0 h-100 rounded-4 shadow-sm product-card position-relative overflow-hidden">
         <button class="btn position-absolute end-0 top-0 mt-2 me-2 z-index-5 bg-white bg-opacity-75 rounded-circle p-2 border-0 wishlist-btn"
-                data-product-id="{{ $product->id }}"
+                data-item-id="{{ $product->id }}"
+                data-item-type="product"
                 title="{{ $product->is_in_wishlist ? 'Remove from Wishlist' : 'Add to Wishlist' }}"
                 style="z-index: 10;">
             <i class="{{ $product->is_in_wishlist ? 'fas fa-heart text-danger' : 'far fa-heart' }} fs-5"></i>
@@ -50,7 +51,7 @@
             </div>
             <a href="/products/{{ $product->id }}" class="see-details-btn">See Details</a>
             @if (strpos($_SERVER['REQUEST_URI'], '/profile/wishlist') !== false)
-                <button class="btn btn-outline-danger btn-sm mt-2 wishlist-btn w-100" data-product-id="{{ $product->id }}">
+                <button class="btn btn-outline-danger btn-sm mt-2 wishlist-btn w-100" data-item-id="{{ $product->id }}" data-item-type="product">
                     <i class="fas fa-heart me-1"></i> Remove from Wishlist
                 </button>
             @endif
@@ -125,45 +126,70 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', async function(e) {
             e.preventDefault();
             e.stopPropagation();
-
-            // Prevent double click
             if (this.disabled) return;
             this.disabled = true;
-
-            const productId = this.dataset.productId;
+            const itemId = this.dataset.itemId;
+            const itemType = this.dataset.itemType;
             const heartIcon = this.querySelector('i');
-
             try {
+                const csrfToken = document.querySelector('meta[name=\'csrf-token\']').content;
                 const response = await fetch('/wishlist/toggle', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
                     },
-                    body: JSON.stringify({ product_id: productId })
+                    body: JSON.stringify({
+                        item_id: itemId,
+                        item_type: itemType
+                    })
                 });
-
                 const data = await response.json();
-
                 if (data.success) {
                     heartIcon.className = data.in_wishlist 
                         ? 'fas fa-heart text-danger fs-5'
                         : 'far fa-heart fs-5';
-
-                    showCustomAlert(
-                        data.in_wishlist ? 'Item added to wishlist!' : 'Item removed from wishlist',
-                        data.in_wishlist ? 'success' : 'danger'
-                    );
-
-                    // Only remove the card if we are on the wishlist page
+                    // Show alert using Bootstrap alert
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = `alert alert-${data.in_wishlist ? 'success' : 'danger'} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+                    alertDiv.style.zIndex = '9999';
+                    alertDiv.innerHTML = `
+                        ${data.message}
+                        <button type=\'button\' class=\'btn-close\' data-bs-dismiss=\'alert\' aria-label=\'Close\'></button>
+                    `;
+                    document.body.appendChild(alertDiv);
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 3000);
                     if (!data.in_wishlist && window.location.pathname === '/profile/wishlist') {
                         this.closest('.col-md-4').remove();
                     }
                 } else {
-                    showCustomAlert(data.message || 'Failed to update wishlist', 'danger');
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3';
+                    alertDiv.style.zIndex = '9999';
+                    alertDiv.innerHTML = `
+                        ${data.message || 'Failed to update wishlist'}
+                        <button type=\'button\' class=\'btn-close\' data-bs-dismiss=\'alert\' aria-label=\'Close\'></button>
+                    `;
+                    document.body.appendChild(alertDiv);
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 3000);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showCustomAlert('An error occurred while updating wishlist', 'danger');
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3';
+                alertDiv.style.zIndex = '9999';
+                alertDiv.innerHTML = `
+                    An error occurred while updating wishlist
+                    <button type=\'button\' class=\'btn-close\' data-bs-dismiss=\'alert\' aria-label=\'Close\'></button>
+                `;
+                document.body.appendChild(alertDiv);
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
             } finally {
                 this.disabled = false;
             }
