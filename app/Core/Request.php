@@ -36,4 +36,9 @@ class Request
         return $section_data && isset($section_data->$key) ? $section_data->$key : $default;
     }
 
+    public static function post($key = null)
+    {
+        return $key ? self::get('post')->$key : self::get('post');
+    }
+
 }
