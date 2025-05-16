@@ -20,3 +20,13 @@
     @endphp
 @endif
 
+@if (\App\Core\Session::has('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <strong>{{ \App\Core\Session::get('error') }}</strong><br>
+    </div>
+    @php
+        \App\Core\Session::remove('error');
+    @endphp
+@endif
+

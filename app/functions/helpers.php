@@ -148,3 +148,46 @@ function url($path = '')
     
     return $base . '/' . $path;
 }
+
+function user_cart_items()
+{
+    $user = get_logged_in_user();
+    if (!$user) {
+        return [];
+    }
+    $userId = $user->id;
+    $cart = DB::table('carts')->where('user_id', $userId)->first();
+    if (!$cart) {
+        return [];
+    }
+    $cartItems = DB::table('cart_items')
+        ->where('cart_id', $cart->id)
+        ->get();
+    return $cartItems;
+}
+
+
+function get_cart_items_with_attributes($cartItems)
+{
+    $items = [];
+    foreach ($cartItems as $cartItem) {
+        if ($cartItem->item_type === 'product') {
+            $item = DB::table('products')
+                ->where('id', $cartItem->item_id)
+                ->first();
+        } else {
+            $item = DB::table('gifts')
+                ->where('id', $cartItem->item_id)
+                ->first();
+        }
+        if ($item) {
+            $items[] = [
+                'cart_item' => $cartItem,
+                'item' => $item
+            ];
+        }
+    }
+    return $items;
+}
+
+
