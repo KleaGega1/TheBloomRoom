@@ -81,10 +81,18 @@ $router->map('POST', '/admin/users/[i:id]/update', 'Admin\UserController@update'
 $router->map('POST', '/admin/users/[i:id]/delete', 'Admin\UserController@delete');
 
 # Wishlist routes
+
 $router->map('GET', '/profile/wishlist', 'WishlistController@index', 'wishlist.index');
 $router->map('POST', '/wishlist/toggle', 'WishlistController@toggle', 'wishlist.toggle');
 $router->map('POST', '/review/submit', 'ReviewController@submitReview');
 $router->map('GET', '/product/[i:id]', 'ReviewController@show');
+
+//cart routes
+$router->map('GET', '/cart', 'CartController@index');
+$router->map('POST', '/cart/add', 'CartController@addToCart');
+$router->map('POST', '/cart/[i:id]/update', 'CartController@updateQuantity');
+$router->map('POST', '/cart/[i:id]/remove', 'CartController@remove');
+
 
 
 
