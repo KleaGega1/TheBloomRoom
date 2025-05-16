@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\{Category, Review, CartItem};
 
 class Gift extends Model
 {
@@ -32,6 +33,11 @@ class Gift extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+      public function cartItems()
+    {
+        return $this->morphMany(CartItem::class, 'item');
     }
 
     

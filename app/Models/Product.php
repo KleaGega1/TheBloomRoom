@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\{Category, OrderItem, Review, Wishlist, CartItem};
 
 class Product extends Model
 {
@@ -23,13 +24,11 @@ class Product extends Model
         'is_bouquet' => 'boolean',
     ];
 
-    // Relationship with Category
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    // For bouquets, relationship with flowers through bouquet_flowers
     public function flowers()
     {
         return $this->belongsToMany(Product::class, 'bouquet_flowers', 'bouquet_id', 'flower_id')
@@ -37,7 +36,6 @@ class Product extends Model
                     ->withTimestamps();
     }
 
-    // For flowers, relationship with bouquets they belong to
     public function bouquets()
     {
         return $this->belongsToMany(Product::class, 'bouquet_flowers', 'flower_id', 'bouquet_id')
@@ -45,33 +43,33 @@ class Product extends Model
                     ->withTimestamps();
     }
 
-    // Relationship with order items
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    // Relationship with reviews
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
 
-    // Relationship with wishlists
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class);
     }
 
-    // Scope for bouquets only
     public function scopeBouquets($query)
     {
         return $query->where('is_bouquet', true);
     }
 
-    // Scope for individual flowers only
     public function scopeFlowers($query)
     {
         return $query->where('is_bouquet', false);
+    }
+
+       public function cartItems()
+    {
+        return $this->morphMany(CartItem::class, 'item');
     }
 }
