@@ -6,11 +6,10 @@
 
 
 <div class="container py-5">
-    <!-- Success message display -->
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success">
             <?= $_SESSION['success'] ?>
-            <?php unset($_SESSION['success']); ?> <!-- Clear the success message after displaying it -->
+            <?php unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
 
@@ -25,7 +24,6 @@
                         <div class="card-body p-4">
                             <h2 class="fw-bold mb-2">{{ $gift->name }}</h2>
                             <h4 class="text-primary mb-3">${{ number_format($gift->price, 2) }}</h4>
-                            
                             @if($gift->quantity <= 0)
                                 <span class="badge bg-danger">Out of Stock</span>
                             @elseif($gift->quantity <= 5)
@@ -33,9 +31,7 @@
                             @else
                                 <span class="badge bg-success">In Stock</span>
                             @endif
-
                             <hr class="my-4">
-                            
                             <div class="mb-4">
                                 <div class="row mb-3">
                                     @if($gift->occasion)
@@ -51,7 +47,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="mb-4">
                                 <h5 class="fw-semibold mb-2">Description</h5>
                                 <div class="text-muted">
@@ -61,22 +56,21 @@
                             @if($gift->quantity > 0)
                             <form action="/cart/add" method="POST" class="mt-4">
                                 <input type="hidden" name="csrf" value="{{ \App\Core\CSRFToken::_token() }}">
-                                <input type="hidden" name="gift_id" value="{{ $gift->id }}">
-                                
+                                <input type="hidden" name="item_id" value="{{ $gift->id }}">
+                                <input type="hidden" name="item_type" value="gift">
                                 <div class="mb-3">
                                     <label class="form-label small text-muted">Quantity:</label>
                                     <div class="d-flex align-items-center">
-                                        <button type="button" class="btn btn-sm btn-light rounded-circle decrease-quantity" style="width: 32px; height: 32px;">
+                                         <button type="button" class="btn btn-sm btn-light rounded-circle decrease-quantity" style="width: 32px; height: 32px;">
                                             <i class="fas fa-minus"></i>
                                         </button>
-                                        <input type="number" class="form-control form-control-sm mx-2 text-center border-0 bg-light quantity-input" 
-                                               name="quantity" value="1" min="1" max="{{ $gift->quantity }}" style="width: 50px;">
-                                        <button type="button" class="btn btn-sm btn-light rounded-circle increase-quantity" style="width: 32px; height: 32px;">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
+                                    <input type="number" class="form-control form-control-sm mx-2 text-center border-0 bg-light quantity-input" 
+                                        name="quantity" value="1" min="1" max="{{ $gift->quantity }}" style="width: 50px;">
+                                    <button type="button" class="btn btn-sm btn-light rounded-circle increase-quantity" style="width: 32px; height: 32px;">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
                                     </div>
                                 </div>
-                                
                                 <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm">
                                     <i class="fas fa-shopping-cart me-2"></i> Add to Cart
                                 </button>
@@ -92,8 +86,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Display Product Reviews -->
             <div class="product-reviews mt-5">
                         <h4 class="fw-semibold mb-3">Reviews</h4>
 

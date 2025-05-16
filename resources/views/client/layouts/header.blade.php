@@ -9,7 +9,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Header Section with Soft Background -->
     <header class="bg-danger bg-opacity-10 py-5 text-center">
         <div class="container">
             <h1 class="display-4 text-danger fw-bold mb-3">The Bloom Room</h1>
@@ -29,8 +28,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Main Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand text-danger fw-bold" href="/">
@@ -54,17 +51,29 @@
                         <a class="nav-link text-dark fw-semibold" href="/contact">Contact</a>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center">
-                <a href="{{ is_logged_in() ? (is_admin() ? '/admin' : '/profile') : '/login' }}" class="btn rounded-circle p-2 position-relative">                
+            <div class="d-flex align-items-center">
+                <a href="/cart" class="btn rounded-circle p-2 position-relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle shadow-sm"
+                        style="
+                            background-color: #dc3545;
+                            color: white;
+                            border-radius: 80%;
+                            font-size: 0.65rem;
+                            padding: 0.2em 0.45em;
+                            transform: translate(-80%, -30%);
+                        ">
+                        {{ count(user_cart_items()) }}
+                    </span>
+                </a>
+
+                <a href="{{ is_logged_in() ? (is_admin() ? '/admin' : '/profile') : '/login' }}" class="btn rounded-circle p-2 position-relative">
                     <i class="fa fa-user"></i>
                 </a>
-                    <a href="/cart" class="btn rounded-circle p-2 position-relative">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="position-absolute top-4 start-100 translate-middle badge rounded-pill text-bg-danger shadow-sm" style="font-size: 0.8rem; padding: 0.4em 0.6em; transform: translate(-50%, -50%);">
-                            0
-                        </span>
-                    </a>
-                </div>
+            </div>
+
+
+
             </div>
         </div>
     </nav>

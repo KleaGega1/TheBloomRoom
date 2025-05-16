@@ -6,14 +6,6 @@
 
 <div class="container py-5">
 
-    <!-- Success message display -->
-    <?php if (isset($_SESSION['success'])): ?>
-        <div class="alert alert-success">
-            <?= $_SESSION['success'] ?>
-            <?php unset($_SESSION['success']); ?> <!-- Clear the success message after displaying it -->
-        </div>
-    <?php endif; ?>
-    <!-- Product Details -->
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
         <div class="row g-0">
             <div class="col-md-6">
@@ -142,24 +134,27 @@
 
                     <div class="mt-4">
                         @if($product->quantity > 0)
-                        <form action="/cart/add" method="POST">
+                        <form action="/cart/add" method="POST" >
                             <input type="hidden" name="csrf" value="{{ \App\Core\CSRFToken::_token() }}">
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="item_id" value="{{ $product->id }}">
+                            <input type="hidden" name="item_type" value="product">
                             <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <button type="button" class="btn btn-outline-secondary decrease-quantity rounded-start-pill">
+                               <div class="mb-3">
+                                    <label class="form-label small text-muted">Quantity:</label>
+                                    <div class="d-flex align-items-center">
+                                         <button type="button" class="btn btn-sm btn-light rounded-circle decrease-quantity" style="width: 32px; height: 32px;">
                                             <i class="fas fa-minus"></i>
                                         </button>
-                                        <input type="number" class="form-control text-center quantity-input border-secondary" name="quantity" value="1" min="1" max="{{ $product->quantity }}">
-                                        <button type="button" class="btn btn-outline-secondary increase-quantity rounded-end-pill">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
+                                    <input type="number" class="form-control form-control-sm mx-2 text-center border-0 bg-light quantity-input" 
+                                        name="quantity" value="1" min="1" max="{{ $product->quantity }}" style="width: 50px;">
+                                    <button type="button" class="btn btn-sm btn-light rounded-circle increase-quantity" style="width: 32px; height: 32px;">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
                                     <button type="submit" class="btn btn-primary rounded-pill px-4 py-3 w-100 shadow-sm">
-                                        <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                                        <i class="fas fa-shopping-cart me-2"></i> Add to Carttttt
                                     </button>
                                 </div>
                             </div>
@@ -350,7 +345,31 @@
         </div>
     </div>
 @endif
-    
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const decreaseBtn = document.querySelector('.decrease-quantity');
+        const increaseBtn = document.querySelector('.increase-quantity');
+        const quantityInput = document.querySelector('.quantity-input');
+        
+        if (decreaseBtn && increaseBtn && quantityInput) {
+            decreaseBtn.addEventListener('click', function() {
+                const value = parseInt(quantityInput.value);
+                if (value > 1) {
+                    quantityInput.value = value - 1;
+                }
+            });
+            
+            increaseBtn.addEventListener('click', function() {
+                const value = parseInt(quantityInput.value);
+                const max = parseInt(quantityInput.getAttribute('max'));
+                if (value < max) {
+                    quantityInput.value = value + 1;
+                }
+            });
+        }
+    });
+</script>
 @endsection
+
