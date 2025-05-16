@@ -33,8 +33,9 @@ public function index(): View
             $query = $query->orderBy('price', $request->sort);
             $sort = $request->sort;
         }
+        
     }
-    
+ 
     list($products, $links) = paginate($query, 8, 'products');
     
     $user = get_logged_in_user();
@@ -66,7 +67,7 @@ public function index(): View
         }
 
         // Get current user
-        $user = Session::get('user');
+        $user = get_logged_in_user();
         
         // Add wishlist status to product
         if ($user) {
