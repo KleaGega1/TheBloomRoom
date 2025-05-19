@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="mt-3">
-                    <a href="/admin/products/bouquets" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
+                    <a href="/admin/orders" class="text-white text-decoration-none">View details <i class="icofont icofont-arrow-right"></i></a>
                 </div>
             </div>
         </div>

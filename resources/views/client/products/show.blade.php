@@ -154,7 +154,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <button type="submit" class="btn btn-primary rounded-pill px-4 py-3 w-100 shadow-sm">
-                                        <i class="fas fa-shopping-cart me-2"></i> Add to Carttttt
+                                        <i class="fas fa-shopping-cart me-2"></i> Add to Cart
                                     </button>
                                 </div>
                             </div>

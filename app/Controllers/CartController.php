@@ -7,49 +7,34 @@ use App\Models\{Cart, CartItem, Product, Gift};
 
 class CartController extends Controller
 {
-  public function index(): View
-{
-    $user = get_logged_in_user();
-    if (!$user) {
-        return redirect('/login');
-    }
+    public function index(): View
+    {
+        $user = get_logged_in_user();
+        if (!$user) {
+            return redirect('/login');
+        }
 
-    $cart = $this->getUserCart($user['id']);
+        $cart = $this->getUserCart($user['id']);
 
-    if (!$cart) {
+        if (!$cart) {
+            return View::render()->view('client.cart.index', [
+                'items' => [],
+                'total' => 0
+            ]);
+        }
+
+        $items = CartItem::query()
+            ->where('cart_id', $cart->id)
+            ->with(['product', 'gift'])
+            ->get();
+
+        $total = $this->calculateCartTotal($items);
+
         return View::render()->view('client.cart.index', [
-            'items' => [],
-            'total' => 0,
-            'products' => [],
-            'gifts' => []
+            'items' => $items,
+            'total' => $total
         ]);
     }
-
-    $items = CartItem::query()
-        ->where('cart_id', $cart->id)
-        ->get();
-
-    $productIds = [];
-    $giftIds = [];
-
-    foreach ($items as $item) {
-        if ($item->item_type === 'product') {
-            $productIds[] = $item->item_id;
-        } elseif ($item->item_type === 'gift') {
-            $giftIds[] = $item->item_id;
-        }
-    }
-
-    $products = Product::all()->keyBy('id');
-    $gifts = Gift::all()->keyBy('id');
-
-return View::render()->view('client.cart.index', [
-    'items' => $items,
-    'products' => $products,
-    'gifts' => $gifts,
-    'total' => $this->calculateCartTotal($items->toArray())
-]);
-}
 
     public function addToCart(): void
     {
@@ -60,7 +45,7 @@ return View::render()->view('client.cart.index', [
         }
 
         $itemId = Request::post('item_id');
-        $itemType = Request::post('item_type'); 
+        $itemType = Request::post('item_type');
         $quantity = (int) Request::post('quantity', 1);
 
         if (!$itemId || !$itemType || $quantity < 1) {
@@ -95,8 +80,7 @@ return View::render()->view('client.cart.index', [
 
         $existingItem = CartItem::query()
             ->where('cart_id', $cart->id)
-            ->where('item_id', $itemId)
-            ->where('item_type', $itemType)
+            ->where($itemType . '_id', $itemId)
             ->first();
 
         if ($existingItem) {
@@ -108,16 +92,13 @@ return View::render()->view('client.cart.index', [
             
             $existingItem->quantity += $quantity;
             $existingItem->save();
-            Session::add('message', 'Item quantity updated in cart');
         } else {
             CartItem::create([
-                'cart_id'   => $cart->id,
-                'item_id'   => $itemId,
-                'item_type' => $itemType,
-                'quantity'  => $quantity,
-                'price'     => $item->price
+                'cart_id' => $cart->id,
+                $itemType . '_id' => $itemId,
+                'quantity' => $quantity,
+                'price' => $item->price
             ]);
-            Session::add('message', 'Item added to cart');
         }
 
         redirect('/cart');
@@ -137,27 +118,25 @@ return View::render()->view('client.cart.index', [
             redirect('/cart');
             return;
         }
-        $cart = Cart::find($cartItem->cart_id);
 
+        $cart = Cart::find($cartItem->cart_id);
         if (!$cart || $cart->user_id !== $user['id']) {
             Session::add('error', 'You do not have permission to remove this item');
             redirect('/cart');
             return;
         }
-        $cartItem->delete();
-        Session::add('message', 'Item removed from cart');
-        redirect('/cart');
 
+        $cartItem->delete();
+        redirect('/cart');
     }
 
     public function updateQuantity(): void
     {
-        $user =get_logged_in_user();
+        $user = get_logged_in_user();
         if (!$user) {
             redirect('/login');
             return;
         }
-        
         
         $itemId = Request::post('item_id');
         $quantity = (int) Request::post('quantity', 1);
@@ -169,7 +148,6 @@ return View::render()->view('client.cart.index', [
         }
         
         $cartItem = CartItem::find($itemId);
-        
         if (!$cartItem) {
             Session::add('error', 'Cart item not found');
             redirect('/cart');
@@ -177,17 +155,13 @@ return View::render()->view('client.cart.index', [
         }
         
         $cart = Cart::find($cartItem->cart_id);
-        
         if (!$cart || $cart->user_id !== $user['id']) {
             Session::add('error', 'You do not have permission to update this item');
             redirect('/cart');
             return;
         }
         
-        $item = $cartItem->item_type === 'product'
-            ? Product::find($cartItem->item_id)
-            : Gift::find($cartItem->item_id);
-            
+        $item = $cartItem->item;
         if (!$item) {
             Session::add('error', 'Item not found');
             redirect('/cart');
@@ -203,7 +177,6 @@ return View::render()->view('client.cart.index', [
         $cartItem->quantity = $quantity;
         $cartItem->save();
         
-        Session::add('message', 'Cart updated');
         redirect('/cart');
     }
 
@@ -218,17 +191,14 @@ return View::render()->view('client.cart.index', [
         return $cart;
     }
 
-private function calculateCartTotal($items): float
-{
-    $total = 0;
-    
-    foreach ($items as $item) {
-        $price = is_array($item) ? $item['price'] : $item->price;
-        $quantity = is_array($item) ? $item['quantity'] : $item->quantity;
+    private function calculateCartTotal($items): float
+    {
+        $total = 0;
         
-        $total += $price * $quantity;
+        foreach ($items as $item) {
+            $total += $item->price * $item->quantity;
+        }
+        
+        return $total;
     }
-    
-    return $total;
-}
 }

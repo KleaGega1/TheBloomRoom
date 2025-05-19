@@ -10,8 +10,8 @@ class CartItem extends Model
 {
     protected $fillable = [
         'cart_id',
-        'item_id',
-        'item_type',
+        'product_id',
+        'gift_id',
         'quantity',
         'price'
     ];
@@ -21,9 +21,18 @@ class CartItem extends Model
         return $this->belongsTo(Cart::class);
     }
 
-
-    public function item()
+    public function product()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Product::class);
+    }
+
+    public function gift()
+    {
+        return $this->belongsTo(Gift::class);
+    }
+
+    public function getItemAttribute()
+    {
+        return $this->product_id ? $this->product : $this->gift;
     }
 }

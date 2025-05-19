@@ -96,4 +96,59 @@ class ProfileController extends Controller
         Session::add('message', 'password updated');
         redirect("/profile");
     }
+
+    public function orders()
+    {
+        $user = get_logged_in_user();
+        if (!$user) {
+            return redirect('/login');
+        }
+        $orders = \App\Models\Order::query()->where('user_id', $user->id)->orderBy('created_at', 'desc')->with('items')->get();
+        return \App\Core\View::render()->view('user.profile.orders', [
+            'orders' => $orders,
+            'user' => $user
+        ]);
+    }
+
+    public function orderDetails($orderId)
+    {
+        $user = get_logged_in_user();
+        if (!$user) {
+            return redirect('/login');
+        }
+        $order = \App\Models\Order::query()->where('id', $orderId)->where('user_id', $user->id)->with('items')->first();
+        if (!$order) {
+            abort(404, 'Order not found');
+        }
+        return \App\Core\View::render()->view('user.profile.order_details', [
+            'order' => $order,
+            'user' => $user
+        ]);
+    }
+
+    public function cancelOrder($orderId)
+    {
+        $user = get_logged_in_user();
+        if (!$user) {
+            return redirect('/login');
+        }
+        $order = \App\Models\Order::query()->where('id', $orderId)->where('user_id', $user->id)->first();
+        if (!$order) {
+            \App\Core\Session::add('invalids', ['Order not found.']);
+            return redirect('/profile/orders');
+        }
+        if (in_array($order->status, ['cancelled', 'shipped', 'delivered', 'processing'])) {
+            \App\Core\Session::add('invalids', ['Order cannot be cancelled.']);
+            return redirect('/profile/orders');
+        }
+        $createdAt = strtotime($order->created_at);
+        if (time() - $createdAt > 3600) {
+            \App\Core\Session::add('invalids', ['Order can only be cancelled within 1 hour of placement.']);
+            return redirect('/profile/orders');
+        }
+        $order->status = 'cancelled';
+        $order->save();
+        \App\Core\Session::add('message', 'Order cancelled successfully.');
+        return redirect('/profile/orders');
+    }
 }

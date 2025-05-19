@@ -80,14 +80,14 @@
 }
 </style>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
     document.body.addEventListener('click', async function(e) {
         const button = e.target.closest('.wishlist-btn');
         if (!button) return;
 
-        e.preventDefault();
-        e.stopPropagation();
-
+                e.preventDefault();
+                e.stopPropagation();
+                
         if (button.disabled) return;
         button.disabled = true;
 
@@ -157,6 +157,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } finally {
             button.disabled = false;
         }
+        });
     });
-});
 </script>

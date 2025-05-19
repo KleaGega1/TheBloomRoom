@@ -35,6 +35,9 @@
                         <a href="/profile/wishlist" class="list-group-item list-group-item-action">
                             <i class="icofont-heart me-2 text-danger"></i> My Wishlist
                         </a>
+                        <a href="/profile/orders" class="list-group-item list-group-item-action">
+                            <i class="icofont-basket me-2 text-success"></i> My Orders
+                        </a>
                         <a href="/profile/{{ $user->id }}/edit" class="list-group-item list-group-item-action">
                             <i class="icofont-user me-2"></i> Edit Profile
                         </a>
@@ -82,6 +85,12 @@
                 <a href="/profile/{{ $user->id }}/edit/password" class="list-group-item list-group-item-action">
                     <i class="icofont-key me-2"></i> Change Password
                 </a>
+                <a href="/profile/wishlist" class="list-group-item list-group-item-action">
+                    <i class="icofont-heart me-2 text-danger"></i> My Wishlist
+                </a>
+                <a href="/profile/orders" class="list-group-item list-group-item-action">
+                    <i class="icofont-basket me-2 text-success"></i> My Orders
+                </a>
                 <form action="/logout/" method="POST" class="m-0">
                     <button type="submit" class="list-group-item list-group-item-action text-danger w-100 text-start">
                         <i class="icofont-logout me-2"></i> Logout
@@ -117,6 +126,45 @@
             alertBox.style.display = 'none';
         }, 1800);
     }
+    </script>
+    <!-- Cancel Order Modal -->
+    <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px;">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <p class="mb-0">Are you sure you want to cancel this order?</p>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn btn-danger px-4" id="confirmCancelOrderBtn">Yes, Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+    let cancelOrderForm = null;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.cancel-order-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                cancelOrderForm = btn.closest('form');
+                var modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+                modal.show();
+            });
+        });
+        var confirmBtn = document.getElementById('confirmCancelOrderBtn');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function() {
+                if (cancelOrderForm) {
+                    cancelOrderForm.submit();
+                }
+            });
+        }
+    });
     </script>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
 </body>

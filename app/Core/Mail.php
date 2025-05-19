@@ -35,6 +35,9 @@ class Mail
         $this->mailer->setFrom($fromEmail, $fromName);
         
         $this->mailer->CharSet = PHPMailer::CHARSET_UTF8;
+        $this->mailer->Timeout = 10; // 10 seconds timeout
+        $this->mailer->SMTPDebug = 2; // Debug output to error log
+        $this->mailer->Debugoutput = 'error_log';
     }
     
     public function send($to, $subject, $body, $isHtml = true)

@@ -93,6 +93,18 @@ $router->map('POST', '/cart/add', 'CartController@addToCart');
 $router->map('POST', '/cart/[i:id]/update', 'CartController@updateQuantity');
 $router->map('POST', '/cart/[i:id]/remove', 'CartController@remove');
 
+// Checkout routes
+$router->map('GET', '/checkout', 'CheckoutController@index');
+$router->map('POST', '/checkout/process', 'CheckoutController@process');
+
+$router->map('GET', '/profile/orders', 'User\ProfileController@orders');
+$router->map('GET', '/profile/orders/[i:id]', 'User\ProfileController@orderDetails');
+$router->map('POST', '/profile/orders/[i:id]/cancel', 'User\ProfileController@cancelOrder');
+
+$router->map('GET', '/admin/orders', 'Admin\OrderController@index');
+$router->map('POST', '/admin/orders/[i:id]/confirm', 'Admin\OrderController@confirm');
+$router->map('POST', '/admin/orders/[i:id]/reject', 'Admin\OrderController@reject');
+
 
 
 
