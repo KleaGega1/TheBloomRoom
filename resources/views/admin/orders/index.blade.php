@@ -22,7 +22,19 @@
                         <td>{{ $order->ref_code }}</td>
                         <td>{{ $order->user->name ?? 'User #'.$order->user_id }}</td>
                         <td>{{ $order->created_at }}</td>
-                        <td><span class="badge bg-primary">{{ ucfirst($order->status) }}</span></td>
+                        <td>
+                            <form action="/admin/orders/{{ $order->id }}/update-status" method="POST" class="d-inline">
+                                <input type="hidden" name="csrf" value="{{ \App\Core\CSRFToken::_token() }}">
+                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="unpaid" {{ $order->status === 'unpaid' ? 'selected' : '' }}>Unpaid</option>
+                                    <option value="paid" {{ $order->status === 'paid' ? 'selected' : '' }}>Paid</option>
+                                    <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing</option>
+                                    <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>Shipped</option>
+                                    <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Delivered</option>
+                                    <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                </select>
+                            </form>
+                        </td>
                         <td>${{ number_format($order->total_price, 2) }}</td>
                         <td>
                             <div class="d-flex flex-wrap gap-2">

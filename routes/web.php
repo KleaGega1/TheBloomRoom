@@ -104,6 +104,7 @@ $router->map('POST', '/profile/orders/[i:id]/cancel', 'User\ProfileController@ca
 $router->map('GET', '/admin/orders', 'Admin\OrderController@index');
 $router->map('POST', '/admin/orders/[i:id]/confirm', 'Admin\OrderController@confirm');
 $router->map('POST', '/admin/orders/[i:id]/reject', 'Admin\OrderController@reject');
+$router->map('POST', '/admin/orders/[i:id]/update-status', 'Admin\OrderController@updateStatus');
 
 
 
