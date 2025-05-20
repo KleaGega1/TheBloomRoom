@@ -39,7 +39,7 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item px-2">
-                        <a class="nav-link text-dark fw-semibold" href="/">Home</a>
+                        <a class="nav-link text-dark fw-semibold" href="/home">Home</a>
                     </li>
                     <li class="nav-item px-2">
                         <a class="nav-link text-dark fw-semibold" href="/products/">Shop</a>

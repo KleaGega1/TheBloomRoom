@@ -224,6 +224,9 @@ ADD COLUMN gift_id INT;
 ALTER TABLE reviews 
 ADD CONSTRAINT fk_gift_id FOREIGN KEY (gift_id) REFERENCES gifts(id);
 
+ALTER TABLE reviews
+MODIFY product_id INT NULL;
+
 CREATE TABLE carts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
