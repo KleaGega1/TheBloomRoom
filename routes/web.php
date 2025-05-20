@@ -106,6 +106,14 @@ $router->map('POST', '/admin/orders/[i:id]/confirm', 'Admin\OrderController@conf
 $router->map('POST', '/admin/orders/[i:id]/reject', 'Admin\OrderController@reject');
 $router->map('POST', '/admin/orders/[i:id]/update-status', 'Admin\OrderController@updateStatus');
 
+$router->map('GET', '/about', 'PageController@about', 'about');
+$router->map('GET', '/contact', 'PageController@contact', 'contact');
+$router->map('GET', '/home', 'PageController@home', 'home');
+
+
+
+
+
 
 
 
