@@ -19,6 +19,31 @@
     </div>
 </section>
 
+<section class="py-5 bg-white border-top border-bottom">
+    <div class="container text-center">
+        <h3 class="mb-4">What We Offer</h3>
+        <p class="text-muted mb-5">We’re passionate about delivering more than just flowers — we deliver moments.</p>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <span class="badge bg-danger bg-opacity-10 text-danger fs-6 py-3 px-4 shadow-sm rounded-pill">
+                🌷 Free Delivery
+            </span>
+            <span class="badge bg-danger bg-opacity-10 text-danger fs-6 py-3 px-4 shadow-sm rounded-pill">
+                🌹 Fresh Flowers
+            </span>
+            <span class="badge bg-danger bg-opacity-10 text-danger fs-6 py-3 px-4 shadow-sm rounded-pill">
+                🌸 Same Day Delivery
+            </span>
+            <span class="badge bg-danger bg-opacity-10 text-danger fs-6 py-3 px-4 shadow-sm rounded-pill">
+                🎁 Handcrafted Arrangements
+            </span>
+            <span class="badge bg-danger bg-opacity-10 text-danger fs-6 py-3 px-4 shadow-sm rounded-pill">
+                💬 24/7 Customer Support
+            </span>
+        </div>
+    </div>
+</section>
+
 <section class="py-5">
     <div class="container">
         <h3 class="mb-4 text-center">What Sets Us Apart</h3>

@@ -11,7 +11,7 @@
 <body>
     <header class="bg-danger bg-opacity-10 py-5 text-center">
         <div class="container">
-            <h1 class="display-4 text-danger fw-bold mb-3">The Bloom Room</h1>
+            <h1 class="display-5 text-danger fw-bold mb-3">The Bloom Room</h1>
             <p class="lead mb-4 text-danger">Your Favorite Flower Shop</p>
             <form class="d-flex justify-content-center" action="/products">
                 <div class="input-group mb-3" style="max-width: 500px;">
@@ -39,7 +39,7 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item px-2">
-                        <a class="nav-link text-dark fw-semibold" href="/home">Home</a>
+                        <a class="nav-link text-dark fw-semibold" href="/">Home</a>
                     </li>
                     <li class="nav-item px-2">
                         <a class="nav-link text-dark fw-semibold" href="/products/">Shop</a>
