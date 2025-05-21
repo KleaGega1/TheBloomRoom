@@ -40,7 +40,11 @@
             <div class="d-flex align-items-center">
                 <span class="text-muted small me-2">Earliest Delivery</span>
             </div>
-            <a href="/gifts/{{ $gift->id }}" class="see-details-btn">See Details</a>
+           <div class="d-grid">
+                <a href="/gifts/{{ $gift->id }}" class="btn-see-details-minimal">
+                    See Details <i class="fas fa-chevron-right ms-1 details-icon"></i>
+                </a>
+            </div>
             @if (strpos($_SERVER['REQUEST_URI'], '/profile/wishlist') !== false)
                 <button class="btn btn-outline-danger btn-sm mt-2 wishlist-btn w-100" data-item-id="{{ $gift->id }}" data-item-type="gift">
                     <i class="fas fa-heart me-1"></i> Remove from Wishlist
@@ -51,40 +55,74 @@
 </div>
 
 <style>
-.image-container {
-    height: 200px;
-    background-color: #f8f9fa;
-    overflow: hidden;
-    transition: background-color 0.3s ease;
-}
+    .image-container {
+        height: 200px;
+        background-color: #f8f9fa;
+        overflow: hidden;
+        transition: background-color 0.3s ease;
+    }
 
-.product-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-.product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
 
-.product-card:hover .product-image {
-    transform: scale(1.05);
-}
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
 
-.wishlist-btn:hover {
-    background-color: #f8d7da;
-}
+    .wishlist-btn:hover {
+        background-color: #f8d7da;
+    }
 
-.wishlist-btn i.fas.text-danger {
-    transition: color 0.3s ease;
-}
+    .wishlist-btn i.fas.text-danger {
+        transition: color 0.3s ease;
+    }
+    .btn-outline-danger.wishlist-btn.w-100:hover {
+            background-color: #dc3545 !important;
+            color: #fff !important;
+            border-color: #dc3545 !important;
+        }
+    .btn-outline-danger.wishlist-btn.w-100:active {
+            background-color: #b52a37 !important;
+            color: #fff !important;
+            border-color: #b52a37 !important;
+    }
+    .btn-see-details-minimal {
+            display: block;
+            text-align: center;
+            padding: 8px 0;
+            color: #6c757d;
+            font-weight: 500;
+            border-top: 1px solid #e9ecef;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-top: 5px;
+    }
+        
+    .btn-see-details-minimal:hover {
+            color: #212529;
+            background-color: #f8f9fa;
+    }
+        
+    .btn-see-details-minimal .details-icon {
+            font-size: 12px;
+            transition: transform 0.2s ease;
+    }
+        
+    .btn-see-details-minimal:hover .details-icon {
+            transform: translateX(3px);
+    }
 </style>
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     document.body.addEventListener('click', async function(e) {
         const button = e.target.closest('.wishlist-btn');
         if (!button) return;
-
                 e.preventDefault();
                 e.stopPropagation();
                 

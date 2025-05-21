@@ -49,7 +49,11 @@
             <div class="d-flex align-items-center">
                 <span class="text-muted small me-2">Earliest Delivery</span>
             </div>
-            <a href="/products/{{ $product->id }}" class="see-details-btn">See Details</a>
+           <div class="d-grid">
+                <a href="/products/{{ $product->id }}" class="btn-see-details-minimal">
+                    See Details <i class="fas fa-chevron-right ms-1 details-icon"></i>
+                </a>
+            </div>
             @if (strpos($_SERVER['REQUEST_URI'], '/profile/wishlist') !== false)
                 <button class="btn btn-outline-danger btn-sm mt-2 wishlist-btn w-100" data-item-id="{{ $product->id }}" data-item-type="product">
                     <i class="fas fa-heart me-1"></i> Remove from Wishlist
@@ -90,7 +94,6 @@
         100% { transform: scale(1); }
     }
 
-    /* Remove from Wishlist button custom styles */
     .btn-outline-danger.wishlist-btn.w-100:hover {
         background-color: #dc3545 !important;
         color: #fff !important;
@@ -100,6 +103,31 @@
         background-color: #b52a37 !important;
         color: #fff !important;
         border-color: #b52a37 !important;
+    }
+      .btn-see-details-minimal {
+        display: block;
+        text-align: center;
+        padding: 8px 0;
+        color: #6c757d;
+        font-weight: 500;
+        border-top: 1px solid #e9ecef;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        margin-top: 5px;
+    }
+    
+    .btn-see-details-minimal:hover {
+        color: #212529;
+        background-color: #f8f9fa;
+    }
+    
+    .btn-see-details-minimal .details-icon {
+        font-size: 12px;
+        transition: transform 0.2s ease;
+    }
+    
+    .btn-see-details-minimal:hover .details-icon {
+        transform: translateX(3px);
     }
 </style>
 

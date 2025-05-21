@@ -118,6 +118,7 @@ class CheckoutController extends Controller
             'recipient_phone' => $user->telephone,
             'delivery_address' => $user->address,
             'delivery_date' => date('Y-m-d', strtotime('+2 days')),
+            'order_id' => $order->id,
         ];
 
         if ($paymentMethod === 'paypal') {
@@ -126,7 +127,7 @@ class CheckoutController extends Controller
             return;
         }
 
-        return View::render()->view('client.checkout.confirmation', $orderData);
+        return View::render()->view('client.checkout.confirmation', compact('orderData'));
     }
 
     private function calculateCartTotal($items): float
