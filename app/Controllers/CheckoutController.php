@@ -7,43 +7,43 @@ use App\Models\{Cart, CartItem, Order, OrderItem, User};
 
 class CheckoutController extends Controller
 {
-    public function index(): View
-    {
-        $user = get_logged_in_user();
-        if (!$user) {
-            return redirect('/login');
-        }
-
-        $cart = Cart::query()->where('user_id', $user->id)->first();
-        if (!$cart) {
-            Session::add('error', 'Your cart is empty');
-            return redirect('/cart');
-        }
-
-        $items = CartItem::query()
-            ->where('cart_id', $cart->id)
-            ->with(['product', 'gift'])
-            ->get();
-
-        if ($items->isEmpty()) {
-            Session::add('error', 'Your cart is empty');
-            return redirect('/cart');
-        }
-
-        $total = $this->calculateCartTotal($items);
-
-        return View::render()->view('client.checkout.index', [
-            'user' => $user,
-            'items' => $items,
-            'total' => $total
-        ]);
+ public function index()
+{
+    $user = get_logged_in_user();
+    if (!$user) {
+        redirect('/login');
+        return;
     }
+
+    $cart = Cart::query()->where('user_id', $user->id)->first();
+    if (!$cart) {
+        Session::add('error', 'Your cart is empty');
+        redirect('/cart');
+        return;
+    }
+
+    $items = CartItem::query()
+        ->where('cart_id', $cart->id)
+        ->with(['product', 'gift'])
+        ->get();
+
+    if ($items->isEmpty()) {
+        Session::add('error', 'Your cart is empty');
+        redirect('/cart');
+        return;
+    }
+
+    $total = $this->calculateCartTotal($items);
+
+    return View::render()->view('client.checkout.index', [
+        'user' => $user,
+        'items' => $items,
+        'total' => $total
+    ]);
+}
 
     public function process()
     {
-        // Debug: Log start of process method
-        error_log('Starting process method in CheckoutController...');
-
         $user = get_logged_in_user();
         if (!$user) {
             redirect('/login');
@@ -68,7 +68,6 @@ class CheckoutController extends Controller
             return;
         }
 
-        // Validate stock availability
         foreach ($items as $item) {
             $product = $item->product_id ? $item->product : $item->gift;
             if ($product->quantity < $item->quantity) {
@@ -82,8 +81,7 @@ class CheckoutController extends Controller
         $refCode = $this->generateRefCode();
         $total = $this->calculateCartTotal($items);
 
-        // Save order
-        $order = \App\Models\Order::create([
+        $order = Order::create([
             'user_id' => $user->id,
             'total_price' => $total,
             'status' => 'unpaid',
@@ -95,7 +93,6 @@ class CheckoutController extends Controller
             'payment_method' => $paymentMethod,
         ]);
 
-        // Save order items
         foreach ($items as $item) {
             $order->items()->create([
                 'product_id' => $item->product_id ?? null,
@@ -106,11 +103,11 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // Clear cart
-        CartItem::query()->where('cart_id', $cart->id)->delete();
-        $cart->delete();
+       if ($paymentMethod !== 'paypal') {
+            CartItem::query()->where('cart_id', $cart->id)->delete();
+            $cart->delete();
+        }
 
-        // Prepare data for confirmation view
         $orderData = [
             'user' => $user,
             'items' => $items,
@@ -123,32 +120,13 @@ class CheckoutController extends Controller
             'delivery_date' => date('Y-m-d', strtotime('+2 days')),
         ];
 
-        // Debug: Log order data and email address
-        error_log('Order data: ' . json_encode($orderData));
-        error_log('Sending email to: ' . $user->email);
+        if ($paymentMethod === 'paypal') {
+            Session::add('paypal_order_id', $order->id);
+            redirect('/paypal/create-payment');
+            return;
+        }
 
-        // Debug: Log start of email sending
-        error_log('Starting to send order confirmation email...');
-
-        // Send order confirmation email
-        // (Removed)
-
-        // Debug: Log end of email sending
-        // (Removed)
-
-        // Debug: Log start of confirmation view rendering
-        error_log('Starting to render confirmation view...');
-
-        // Return the confirmation view (alert is in the Blade file)
         return View::render()->view('client.checkout.confirmation', $orderData);
-
-        // Debug: Log end of confirmation view rendering
-        error_log('Confirmation view rendered successfully.');
-
-        // Debug: Log end of process method
-        error_log('Process method completed successfully.');
-
-        return;
     }
 
     private function calculateCartTotal($items): float
@@ -164,4 +142,4 @@ class CheckoutController extends Controller
     {
         return 'ORD-' . strtoupper(substr(uniqid(), -6));
     }
-} 
+}
