@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Core\{CSRFToken, Request, RequestValidation, Session, View};
 use App\Models\User;
 use Exception;
-//Handles user authentication: registration, login, logout.
+
 class AuthController extends Controller
 {
     public function __construct()

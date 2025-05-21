@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11b209d0aa21e2192f70e7afbfbeda1f",
+    "content-hash": "928f717f21b451c5bd95370ec8b456c3",
     "packages": [
         {
             "name": "altorouter/altorouter",
@@ -65,49 +65,6 @@
                 "source": "https://github.com/dannyvankooten/AltoRouter/tree/2.0.2"
             },
             "time": "2020-03-09T08:34:59+00:00"
-        },
-        {
-            "name": "cfyer/colorize-cli",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/cfyer/colorize-cli.git",
-                "reference": "f33e87ffa30a7daaa3fad083aab8d2842b72ac11"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/cfyer/colorize-cli/zipball/f33e87ffa30a7daaa3fad083aab8d2842b72ac11",
-                "reference": "f33e87ffa30a7daaa3fad083aab8d2842b72ac11",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Cfyer\\ColorizeCli\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Hamidreza Safayee",
-                    "email": "hamidreza.safayee@gmail.com"
-                }
-            ],
-            "description": "Simple PHP library for change command line color",
-            "support": {
-                "issues": "https://github.com/cfyer/colorize-cli/issues",
-                "source": "https://github.com/cfyer/colorize-cli/tree/v1.1.0"
-            },
-            "time": "2023-02-11T09:33:48+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1286,6 +1243,48 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "setasign/fpdf",
+            "version": "1.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Setasign/FPDF.git",
+                "reference": "d77904018090c17dc9f3ab6e944679a7a47e710a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Setasign/FPDF/zipball/d77904018090c17dc9f3ab6e944679a7a47e710a",
+                "reference": "d77904018090c17dc9f3ab6e944679a7a47e710a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "fpdf.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Olivier Plathey",
+                    "email": "oliver@fpdf.org",
+                    "homepage": "http://fpdf.org/"
+                }
+            ],
+            "description": "FPDF is a PHP class which allows to generate PDF files with pure PHP. F from FPDF stands for Free: you may use it for any kind of usage and modify it to suit your needs.",
+            "homepage": "http://www.fpdf.org",
+            "keywords": [
+                "fpdf",
+                "pdf"
+            ],
+            "support": {
+                "source": "https://github.com/Setasign/FPDF/tree/1.8.2"
+            },
+            "time": "2019-12-08T10:32:10+00:00"
         },
         {
             "name": "symfony/console",
@@ -3852,10 +3851,10 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

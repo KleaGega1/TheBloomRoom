@@ -22,6 +22,7 @@
     "vlucas/phpdotenv": "^5.5",
     "altorouter/altorouter": "^2.0",
     "phpmailer/phpmailer": "^6.7",
-    "voku/pagination": "^4.0"
+    "voku/pagination": "^4.0",
+    "setasign/fpdf": "^1.8"
   }
 }

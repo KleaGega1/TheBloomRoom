@@ -11,7 +11,7 @@
             <h4 class="mb-0">Order Summary</h4>
         </div>
         <div class="card-body">
-            @foreach($items as $item)
+            @foreach($orderData['items'] as $item)
                 <div class="d-flex mb-3">
                     <img src="/{{ $item->product_id ? $item->product->image_path : $item->gift->image_path }}" 
                          alt="{{ $item->product_id ? $item->product->name : $item->gift->name }}"
@@ -33,10 +33,10 @@
             <h4 class="mb-0">Delivery Information</h4>
         </div>
         <div class="card-body">
-            <p><strong>Recipient Name:</strong> {{ $recipient_name }}</p>
-            <p><strong>Phone Number:</strong> {{ $recipient_phone }}</p>
-            <p><strong>Delivery Address:</strong> {{ $delivery_address }}</p>
-            <p><strong>Delivery Date:</strong> {{ $delivery_date }}</p>
+            <p><strong>Recipient Name:</strong> {{ $orderData['recipient_name'] }}</p>
+            <p><strong>Phone Number:</strong> {{ $orderData['recipient_phone'] }}</p>
+            <p><strong>Delivery Address:</strong> {{ $orderData['delivery_address'] }}</p>
+            <p><strong>Delivery Date:</strong> {{ $orderData['delivery_date'] }}</p>
         </div>
     </div>
     <div class="card mb-4">
@@ -44,7 +44,7 @@
             <h4 class="mb-0">Payment Method</h4>
         </div>
         <div class="card-body">
-            <p>{{ strtoupper($payment_method) }}</p>
+            <p>{{ strtoupper($orderData['payment_method']) }}</p>
         </div>
     </div>
     <div class="card">
@@ -54,7 +54,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
                 <span>Subtotal</span>
-                <span>${{ number_format($total, 2) }}</span>
+                <span>${{ number_format($orderData['total'], 2) }}</span>
             </div>
             <div class="d-flex justify-content-between mb-3">
                 <span>Delivery Fee</span>
@@ -63,9 +63,10 @@
             <hr>
             <div class="d-flex justify-content-between mb-3">
                 <strong>Total</strong>
-                <strong>${{ number_format($total, 2) }}</strong>
+                <strong>${{ number_format($orderData['total'], 2) }}</strong>
             </div>
         </div>
     </div>
+    <a href="/invoice/download/{{$orderData['order_id']}} " class="text-danger mt-2">Download Invoice</a>
 </div>
 @endsection 

@@ -114,7 +114,7 @@ $router->map('GET', '/paypal/create-payment', 'PaypalController@createPayment');
 $router->map('GET', '/paypal/success', 'PaypalController@success');
 $router->map('GET', '/paypal/cancel', 'PaypalController@cancel');
 
-
+$router->map('GET', '/invoice/download/[i:id]', 'InvoiceController@download');
 
 
 
