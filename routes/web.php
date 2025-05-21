@@ -110,7 +110,9 @@ $router->map('GET', '/about', 'PageController@about', 'about');
 $router->map('GET', '/contact', 'PageController@contact', 'contact');
 $router->map('GET', '/home', 'PageController@home', 'home');
 
-
+$router->map('GET', '/paypal/create-payment', 'PaypalController@createPayment');
+$router->map('GET', '/paypal/success', 'PaypalController@success');
+$router->map('GET', '/paypal/cancel', 'PaypalController@cancel');
 
 
 
