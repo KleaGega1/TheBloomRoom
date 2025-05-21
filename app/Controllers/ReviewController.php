@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\{Request, View};
-use App\Models\{Product, Gift, Review};
+use App\Models\{Product, Gift, Review, Order};
 
 class ReviewController
 {
@@ -22,11 +22,26 @@ class ReviewController
         $rating = $_POST['rating'] ?? null;
         $comment = htmlspecialchars($_POST['comment'] ?? '');
 
+        // Handle file upload
+        $photoPath = null;
+        if (isset($_FILES['review_photo']) && $_FILES['review_photo']['error'] === UPLOAD_ERR_OK) {
+            $fileTmp = $_FILES['review_photo']['tmp_name'];
+            $fileName = uniqid('review_', true) . '.' . pathinfo($_FILES['review_photo']['name'], PATHINFO_EXTENSION);
+            $destinationDir = __DIR__ . '/../../public/uploads/reviews/';
+            if (!is_dir($destinationDir)) {
+                mkdir($destinationDir, 0777, true);
+            }
+            $destination = $destinationDir . $fileName;
+            if (move_uploaded_file($fileTmp, $destination)) {
+                $photoPath = 'uploads/reviews/' . $fileName;
+            }
+        }
+
         $review = new Review();
         $review->user_id = $user_id;
         $review->rating = $rating;
         $review->comment = $comment;
-
+        $review->photo = $photoPath;
 
         // Determine ID and assign to correct field
         if ($type === 'gift') {
@@ -36,7 +51,7 @@ class ReviewController
         } else {
             $product_id = $_POST['product_id'] ?? null;
             $review->product_id = $product_id;
-            $redirectUrl = "/product/$product_id";
+            $redirectUrl = "/products/$product_id";
         }
 
         $review->save();

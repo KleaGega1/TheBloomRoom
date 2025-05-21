@@ -122,6 +122,11 @@
                                                 @endif
                                             @endfor
                                         </div>
+                                        @if($review->photo)
+                                            <div class="mb-2">
+                                                <img src="/{{ $review->photo }}" alt="Review photo" style="max-width:120px; max-height:120px; border-radius:8px;">
+                                            </div>
+                                        @endif
                                         <p class="mb-0">{{ $review->comment }}</p>
                                         <small class="text-muted d-block" style="font-size: 13px;">
                                             {{ $review->user->name }} {{ $review->user->surname }}, {{ $review->created_at->format('j F Y') }}
@@ -154,86 +159,104 @@
                     <div class="leave-review mt-5">
                         <h4 class="fw-semibold mb-3">Leave a Review</h4>
 
-                        <style>
-                            .star-rating i {
-                                font-size: 24px;
-                                color: #ccc;
-                                cursor: pointer;
-                                transition: color 0.2s;
-                            }
+                        @if (isset($_SESSION['user_id']))
+                            @php
+                                $user_id = $_SESSION['user_id'];
+                                $delivered_orders = \App\Models\Order::where('user_id', $user_id)
+                                    ->where('status', 'delivered')
+                                    ->whereHas('items', function($query) use ($gift) {
+                                        $query->where('gift_id', $gift->id);
+                                    })
+                                    ->get();
+                            @endphp
 
-                            .star-rating i.hover,
-                            .star-rating i.selected {
-                                color: #ffc107; 
-                            }
-                        </style>
-            <form action="/review/submit" method="POST" class="border rounded-3 p-4 shadow-sm">
-                <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?? ''; ?>">
-                <input type="hidden" name="gift_id" value="{{ $gift->id }}">
-                @if (isset($_SESSION['user_id']))
-                    <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
-                @else
-                    <div class="alert alert-warning">
-                        You must be logged in to leave a review. <a href="/login" class="alert-link">Login here</a>.
-                    </div>
-                @endif
-                <input type="hidden" name="rating" id="rating-value" required>
-                <input type="hidden" name="type" value="gift">
-                <div class="mb-3">
-                    <label class="form-label">Rating:</label>
-                    <div class="star-rating">
-                        @for ($i = 1; $i <= 5; $i++)
-                            <i class="fas fa-star" data-value="{{ $i }}"></i>
-                        @endfor
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="comment" class="form-label">Add a comment:</label>
-                    <textarea name="comment" id="comment" rows="4" class="form-control" required></textarea>
-                </div>
-                @if (isset($_SESSION['user_id']))
-                        <button type="submit" class="btn btn-primary px-4">Submit Review</button>
-                    @else
-                        <button type="button" class="btn btn-secondary px-4" disabled>Login to Submit Review</button>
-                @endif            
-            </form>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const stars = document.querySelectorAll('.star-rating i');
-                                const ratingInput = document.getElementById('rating-value');
+                            @if($delivered_orders->count() > 0)
+                                <style>
+                                    .star-rating i {
+                                        font-size: 24px;
+                                        color: #ccc;
+                                        cursor: pointer;
+                                        transition: color 0.2s;
+                                    }
 
-                                let selectedRating = 0;
+                                    .star-rating i.hover,
+                                    .star-rating i.selected {
+                                        color: #ffc107; 
+                                    }
+                                </style>
 
-                                stars.forEach((star, index) => {
-                                    // Hover effect
-                                    star.addEventListener('mouseover', () => {
-                                        stars.forEach((s, i) => {
-                                            s.classList.toggle('hover', i <= index);
+                                <form action="/review/submit" method="POST" class="border rounded-3 p-4 shadow-sm" enctype="multipart/form-data">
+                                    <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?? ''; ?>">
+                                    <input type="hidden" name="gift_id" value="{{ $gift->id }}">
+                                    <input type="hidden" name="user_id" value="{{ $user_id }}">
+                                    <input type="hidden" name="rating" id="rating-value" required>
+                                    <input type="hidden" name="type" value="gift">
+                                    <div class="mb-3">
+                                        <label for="review_photo" class="form-label">Upload Photo (optional):</label>
+                                        <input type="file" name="review_photo" id="review_photo" class="form-control" accept="image/*">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Rating:</label>
+                                        <div class="star-rating">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i class="fas fa-star" data-value="{{ $i }}"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="comment" class="form-label">Add a comment:</label>
+                                        <textarea name="comment" id="comment" rows="4" class="form-control" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary px-4">Submit Review</button>
+                                </form>
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const stars = document.querySelectorAll('.star-rating i');
+                                        const ratingInput = document.getElementById('rating-value');
+
+                                        let selectedRating = 0;
+
+                                        stars.forEach((star, index) => {
+                                            // Hover effect
+                                            star.addEventListener('mouseover', () => {
+                                                stars.forEach((s, i) => {
+                                                    s.classList.toggle('hover', i <= index);
+                                                });
+                                            });
+
+                                            star.addEventListener('mouseout', () => {
+                                                stars.forEach((s, i) => {
+                                                    s.classList.remove('hover');
+                                                    s.classList.toggle('selected', i < selectedRating);
+                                                });
+                                            });
+
+                                            // Click event to set rating
+                                            star.addEventListener('click', () => {
+                                                selectedRating = parseInt(star.getAttribute('data-value'));
+                                                ratingInput.value = selectedRating;
+
+                                                stars.forEach((s, i) => {
+                                                    s.classList.remove('selected');
+                                                    if (i < selectedRating) {
+                                                        s.classList.add('selected');
+                                                    }
+                                                });
+                                            });
                                         });
                                     });
-
-                                    star.addEventListener('mouseout', () => {
-                                        stars.forEach((s, i) => {
-                                            s.classList.remove('hover');
-                                            s.classList.toggle('selected', i < selectedRating);
-                                        });
-                                    });
-
-                                    // Click event to set rating
-                                    star.addEventListener('click', () => {
-                                        selectedRating = parseInt(star.getAttribute('data-value'));
-                                        ratingInput.value = selectedRating;
-
-                                        stars.forEach((s, i) => {
-                                            s.classList.remove('selected');
-                                            if (i < selectedRating) {
-                                                s.classList.add('selected');
-                                            }
-                                        });
-                                    });
-                                });
-                            });
-                        </script>
+                                </script>
+                            @else
+                                <div class="alert alert-info">
+                                    You can only review items from orders that have been delivered. Purchase and receive this item to leave a review.
+                                </div>
+                            @endif
+                        @else
+                            <div class="alert alert-warning">
+                                You must be logged in to leave a review. <a href="/login" class="alert-link">Login here</a>.
+                            </div>
+                        @endif
                     </div>
 
 

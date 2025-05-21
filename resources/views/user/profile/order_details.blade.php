@@ -49,7 +49,16 @@
                                 <td>{{ $item->product_id ? $item->product->name : ($item->gift ? $item->gift->name : 'Product') }}</td>
                                 <td>{{ $item->quantity }}</td>
                                 <td>${{ number_format($item->unit_price, 2) }}</td>
-                                <td class="fw-bold">${{ number_format($item->unit_price * $item->quantity, 2) }}</td>
+                                <td class="fw-bold">
+                                    ${{ number_format($item->unit_price * $item->quantity, 2) }}
+                                    @if($order->status === 'delivered')
+                                        @if($item->product_id)
+                                            <a href="/products/{{ $item->product_id }}#leave-review" class="btn btn-sm btn-outline-primary ms-2">Add a Review</a>
+                                        @elseif($item->gift_id)
+                                            <a href="/gifts/{{ $item->gift_id }}#leave-review" class="btn btn-sm btn-outline-primary ms-2">Add a Review</a>
+                                        @endif
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
