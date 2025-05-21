@@ -121,4 +121,71 @@
     </div>
 </section>
 
+<!-- Fun Flower Facts Carousel -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="mb-5">Did You Know?</h2>
+
+        <div id="flowerFactsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <p class="text-muted fs-5">🌻 Sunflowers turn their heads to follow the sun — a trait called heliotropism!</p>
+                </div>
+                <div class="carousel-item">
+                    <p class="text-muted fs-5">🌷 Tulips were once more valuable than gold during the 17th-century Tulip Mania in the Netherlands.</p>
+                </div>
+                <div class="carousel-item">
+                    <p class="text-muted fs-5">🌸 Cherry blossoms symbolize the beauty and fragility of life in Japanese culture.</p>
+                </div>
+                <div class="carousel-item">
+                    <p class="text-muted fs-5">🌼 Daisies are actually two flowers in one: petals and a central disc made of tiny florets.</p>
+                </div>
+                <div class="carousel-item">
+                    <p class="text-muted fs-5">🌺 Orchids can live up to 100 years in the wild — talk about lasting beauty!</p>
+                </div>
+                <div class="carousel-item">
+                    <p class="text-muted fs-5">🌹 Roses are related to apples and raspberries!</p>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#flowerFactsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" style="filter: invert(1);"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#flowerFactsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" style="filter: invert(1);"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <div class="mt-4">
+            <img src="/images/products/flower-line.jpg" alt="Decorative Border" class="img-fluid" style="max-width: 90%; height: auto;">
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Flower Care Tips</h2>
+        <ul class="list-unstyled mx-auto" style="max-width: 500px;">
+            <li class="mb-3 d-flex align-items-center text-muted">
+                <span class="fs-4 me-3">💧</span>
+                <span>Change the water every 2 days to keep your flowers fresh.</span>
+            </li>
+            <li class="mb-3 d-flex align-items-center text-muted">
+                <span class="fs-4 me-3">🌡️</span>
+                <span>Keep flowers in a cool spot, away from direct sunlight and heat.</span>
+            </li>
+            <li class="mb-3 d-flex align-items-center text-muted">
+                <span class="fs-4 me-3">✂️</span>
+                <span>Trim the stems at an angle to help them absorb more water.</span>
+            </li>
+        </ul>
+    </div>
+</section>
+
+
+
+
+
 @endsection
