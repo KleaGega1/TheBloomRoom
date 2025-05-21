@@ -27,7 +27,7 @@
                             <textarea class="form-control" id="message" name="message" rows="6" placeholder="Write your message here..." required></textarea>
                         </div>
                         
-                        <button type="submit" class="btn btn-danger fw-bold px-4">Send Message</button>
+                        <button type="submit" class="btn btn-danger fw-bold px-4 disabled">Send Message</button>
                     </form>
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <div class="col-md-4">
                 <div class="card shadow-sm p-4 h-100">
                     <h5 class="mb-4">Our Contact Details</h5>
-                    <p class="mb-3"><i class="fas fa-map-marker-alt text-danger me-2"></i> Rruga e Luleve, Tirana, Albania</p>
+                    <p class="mb-3"><i class="fas fa-map-marker-alt text-danger me-2"></i> Flower Street, Tirana, Albania</p>
                     <p class="mb-3"><i class="fas fa-envelope text-danger me-2"></i> contact@thebloomroom.al</p>
                     <p class="mb-3"><i class="fas fa-phone text-danger me-2"></i> +355 68 123 4567</p>
 

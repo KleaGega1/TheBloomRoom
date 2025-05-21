@@ -30,7 +30,7 @@
                         </label>
                         <div class="input-group">
                             <span class="input-group-text bg-light">
-                                <i class="icofont-user text-danger"></i>
+                                <i class="icofont-user"></i>
                             </span>
                             <input type="text" id="name" name="name" class="form-control" value="{{ $user->name }}" required>
                         </div>
@@ -42,7 +42,7 @@
                         </label>
                         <div class="input-group">
                             <span class="input-group-text bg-light">
-                                <i class="icofont-user-alt-7 text-danger"></i>
+                                <i class="icofont-user-alt-7"></i>
                             </span>
                             <input type="text" id="surname" name="surname" class="form-control" value="{{ $user->surname }}" required>
                         </div>
@@ -65,7 +65,7 @@
                         </label>
                         <div class="input-group">
                             <span class="input-group-text bg-light">
-                                <i class="icofont-user-alt-7 text-danger"></i>
+                                <i class="icofont-user-alt-7"></i>
                             </span>
                             <input type="text" id="address" name="address" class="form-control" value="{{ $user->address }}" required>
                         </div>
@@ -77,7 +77,7 @@
                         </label>
                         <div class="input-group">
                             <span class="input-group-text bg-light">
-                                <i class="icofont-user-alt-7 text-danger"></i>
+                                <i class="icofont-user-alt-7"></i>
                             </span>
                             <input type="text" id="city" name="city" class="form-control" value="{{ $user->city }}" required>
                         </div>
@@ -89,7 +89,7 @@
                         </label>
                         <div class="input-group">
                             <span class="input-group-text bg-light">
-                                <i class="icofont-user-alt-7 text-danger"></i>
+                                <i class="icofont-user-alt-7"></i>
                             </span>
                             <input type="text" id="postal_code" name="postal_code" class="form-control" value="{{ $user->postal_code }}" required>
                         </div>
