@@ -352,20 +352,19 @@
                 </div>
             @endif
         </div>
+            @if (!empty($similarProducts) && count($similarProducts) > 0)
+                <div class="similar-products mt-5">
+                <h3 class="fw-bold mb-4">You May Also Like</h3>
+                    <div class="row g-4">
+                        @foreach($similarProducts as $similarProduct)
+                            @if($similarProduct->id != $product->id)
+                                    @include('client.products.product-card', ['product' => $similarProduct])
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+        @endif
     </div>
-    
-    @if (!empty($similarProducts) && count($similarProducts) > 0)
-    <div class="similar-products mt-5">
-        <h3 class="fw-bold mb-4">You May Also Like</h3>
-        <div class="row g-4">
-            @foreach($similarProducts as $similarProduct)
-                @if($similarProduct->id != $product->id)
-                        @include('client.products.product-card', ['product' => $similarProduct])
-                @endif
-            @endforeach
-        </div>
-    </div>
-@endif
 </div>
 
 <script>

@@ -88,7 +88,6 @@
             </div>
             <div class="product-reviews mt-5">
                         <h4 class="fw-semibold mb-3">Reviews</h4>
-
                         <div class="d-flex align-items-center mb-3">
                             <span class="fw-bold me-2 fs-5">{{ number_format($averageRating, 1) }}</span>
 
@@ -154,8 +153,6 @@
                             }
                         });
                     </script>
-
-
                     <div class="leave-review mt-5">
                         <h4 class="fw-semibold mb-3">Leave a Review</h4>
 
@@ -169,7 +166,6 @@
                                     })
                                     ->get();
                             @endphp
-
                             @if($delivered_orders->count() > 0)
                                 <style>
                                     .star-rating i {
@@ -184,7 +180,6 @@
                                         color: #ffc107; 
                                     }
                                 </style>
-
                                 <form action="/review/submit" method="POST" class="border rounded-3 p-4 shadow-sm" enctype="multipart/form-data">
                                     <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?? ''; ?>">
                                     <input type="hidden" name="gift_id" value="{{ $gift->id }}">
@@ -209,16 +204,12 @@
                                     </div>
                                     <button type="submit" class="btn btn-primary px-4">Submit Review</button>
                                 </form>
-
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         const stars = document.querySelectorAll('.star-rating i');
                                         const ratingInput = document.getElementById('rating-value');
-
                                         let selectedRating = 0;
-
                                         stars.forEach((star, index) => {
-                                            // Hover effect
                                             star.addEventListener('mouseover', () => {
                                                 stars.forEach((s, i) => {
                                                     s.classList.toggle('hover', i <= index);
@@ -258,8 +249,6 @@
                             </div>
                         @endif
                     </div>
-
-
                 @if(count($similarGift) > 0)
                     <div class="similar-products mt-5">
                         <h3 class="fw-bold mb-4">You May Also Like</h3>
